@@ -23,9 +23,7 @@ const app = new Elysia()
   .use(html())
   .get("/", () => (
     <Layout>
-      <h1
-        class="block mb-2 text-l font-medium text-gray-900 dark:text-white"
-      >
+      <h1>
         There are {count} users in the database.
       </h1>
     </Layout>
