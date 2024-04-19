@@ -1,7 +1,8 @@
 import { Elysia } from "elysia";
 import { html } from '@elysiajs/html'
 import {PrismaClient} from "@prisma/client";
-import Layout from './layout'
+import Layout from './components/layout'
+import Navbar from "./components/navbar";
 
 const db = new PrismaClient();
 
@@ -9,9 +10,11 @@ const app = new Elysia()
   .use(html())
   .get("/", () => (
     <Layout>
-      <h1>
-        There are {db.user.count()} users in the database.
-      </h1>
+      <div>
+        <h1>
+          There are {db.user.count()} users in the database.
+        </h1>
+      </div>
     </Layout>
   ))
   .get("/users", async () => (
