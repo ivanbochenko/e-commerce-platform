@@ -28,8 +28,27 @@ const app = new Elysia()
       </h1>
     </Layout>
   ))
-  .get("/users", () => users)
-  .get('/user/:email', ({ params: { email } }) => db.user.findUnique({where: { email }}))
+  .get("/users", () => (
+    <Layout>
+      <ul>
+        {users.map( user => 
+          <li>
+            <h1>{user?.name}</h1>
+            <p>{user?.email}</p>
+          </li>
+        )}
+      </ul>
+    </Layout>
+  ))
+  .get('/user/:email', async ({ params: { email } }) => {
+    const user = await db.user.findUnique({where: { email }})
+    return <Layout>
+      <div>
+        <h1>{user?.name}</h1>
+        <p>{user?.email}</p>
+      </div>
+      </Layout>
+  })
   .listen(3000);
 
 console.log(

@@ -11,7 +11,31 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id          Int       @id @default(autoincrement())
+  created     DateTime? @default(now())
+  email       String    @unique
+  password    String?
+  name        String?
+  items       Item[]
+  message_out Message[] @relation("author")
+  message_in  Message[] @relation("receiver")
+}
+
+model Item {
+  id          Int     @id @default(autoincrement())
+  user        User    @relation(fields: [user_id], references: [id])
+  user_id     Int
+  name        String
+  image       String?
+  description String
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  time        DateTime @default(now())
+  text        String
+  author      User     @relation("author", fields: [author_id], references: [id], onDelete: Cascade)
+  author_id   Int
+  receiver    User     @relation("receiver", fields: [receiver_id], references: [id], onDelete: Cascade)
+  receiver_id Int
 }
