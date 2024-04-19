@@ -18,8 +18,8 @@ export default function Layout({ children }: { children: JSX.Element }) {
       <main class="m-4 flex-grow">{children}</main>
       
 
-      <footer class="bg-white shadow dark:bg-gray-900">
-          <div class="w-full max-w-screen-xl mx-auto p-4 md:py-4">
+      <footer class="p-4 bg-white shadow dark:bg-gray-900">
+          <div class="w-full max-w-screen-xl mx-auto md:py-2">
               <div class="sm:flex sm:items-center sm:justify-between">
                   <a href="/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
                       {/* <img src="..\images\logo.png" class="h-8" alt="Tradeplan Logo" /> */}

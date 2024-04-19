@@ -27,7 +27,7 @@ model Item {
   user_id     Int
   name        String
   image       String?
-  description String
+  description String?
 }
 
 model Message {
