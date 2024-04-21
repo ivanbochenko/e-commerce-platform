@@ -18,8 +18,12 @@ export default function Layout({ children }: { children: JSX.Element }) {
       <nav
         class="relative flex w-full flex-wrap items-center justify-between bg-gray-900 py-2 shadow-dark-mild lg:py-4">
         <div class="flex w-full flex-wrap items-center justify-between px-3">
+
           <span class="ms-2 text-xl font-semibold text-black dark:text-white">Tradeplan</span>
+
+          {}
           <div class="ms-5 flex w-[30%] items-center justify-between">
+            {/* search */}
             <input
               type="search"
               class="relative m-0 block w-[1px] min-w-0 flex-auto rounded border border-solid border-secondary-500 bg-transparent bg-clip-padding px-3 py-1.5 text-base font-normal text-surface transition duration-300 ease-in-out focus:border-primary focus:text-gray-700 focus:shadow-inset focus:outline-none motion-reduce:transition-none dark:border-white/10 dark:bg-zinc-200 dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill"
@@ -27,7 +31,6 @@ export default function Layout({ children }: { children: JSX.Element }) {
               aria-label="Search"
               aria-describedby="button-addon2" />
               
-            {/* search icon */}
             <span
               class="flex items-center whitespace-nowrap rounded px-3 py-1.5 text-center text-base font-normal text-gray-600 dark:text-white [&>svg]:w-5"
               id="basic-addon2">
@@ -42,6 +45,7 @@ export default function Layout({ children }: { children: JSX.Element }) {
               </svg>
             </span>
           </div>
+
         </div>
       </nav>
 

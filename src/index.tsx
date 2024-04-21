@@ -2,27 +2,32 @@ import { Elysia } from "elysia";
 import { html } from '@elysiajs/html'
 import {PrismaClient} from "@prisma/client";
 import Layout from './components/layout'
-import Navbar from "./components/navbar";
 
 const db = new PrismaClient();
 
 const app = new Elysia()
   .use(html())
-  .get("/", () => (
-    <Layout>
-      <div>
-        <h1>
-          There are {db.user.count()} users in the database.
-        </h1>
-      </div>
-    </Layout>
-  ))
+  .get("/", async ({ cookie: { key } }) => {
+    key.value = key.value ?? "new key"
+    return (
+      <Layout >
+        <div>
+          <p>{key.value}</p>
+          {(await db.item.findMany()).map( item => 
+            <p>
+              {item.name}
+            </p>
+          )}
+        </div>
+      </Layout>
+    )
+  })
   .get("/users", async () => (
     <Layout>
       <ul>
         {(await db.user.findMany()).map( user => 
           <li>
-            <h1>{user?.name}</h1>
+            <p>{user?.name}</p>
             <p>{user?.email}</p>
           </li>
         )}
@@ -33,7 +38,7 @@ const app = new Elysia()
     const user = await db.user.findUnique({where: { email }})
     return <Layout>
       <div>
-        <h1>{user?.name}</h1>
+        <p>{user?.name}</p>
         <p>{user?.email}</p>
       </div>
       </Layout>
