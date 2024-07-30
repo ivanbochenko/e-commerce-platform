@@ -21,11 +21,11 @@ const app = new Elysia()
           <p>{key.value}</p>
           <button type="button" class="text-white bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:ring-sky-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-sky-600 dark:hover:bg-sky-700 focus:outline-none dark:focus:ring-sky-800"
             hx-get="/items"
-            hx-trigger="click"
+            // hx-trigger="click"
             hx-target="#replaceMe"
             hx-swap="outerHTML"
           >
-            Click Me!
+            Items
           </button>
         </div>
       </Layout>
