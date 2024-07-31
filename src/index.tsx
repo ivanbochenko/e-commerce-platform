@@ -15,11 +15,27 @@ const app = new Elysia()
   .use(staticPlugin())
   .get("/", async ({ cookie: { key } }) => {
     key.value = key.value ?? "new key"
+    console.log(key.value)
     return (
       <Layout >
-        <div id="replaceMe">
-          <p>{key.value}</p>
-          <button type="button" class="text-white bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:ring-sky-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-sky-600 dark:hover:bg-sky-700 focus:outline-none dark:focus:ring-sky-800"
+        <div id="replaceMe" class="flex space-x-4">
+          <button type="button" class="text-white bg-sky-600 hover:bg-sky-700 font-medium rounded-[12px] text-sm w-1/3 h-20 mb-2"
+            hx-get="/items"
+            // hx-trigger="click"
+            hx-target="#replaceMe"
+            hx-swap="outerHTML"
+          >
+            Items
+          </button>
+          <button type="button" class="text-white bg-violet-700 hover:bg-violet-600 font-medium rounded-[12px] text-sm w-1/3 h-20 mb-2"
+            hx-get="/items"
+            // hx-trigger="click"
+            hx-target="#replaceMe"
+            hx-swap="outerHTML"
+          >
+            Items
+          </button>
+          <button type="button" class="text-white bg-yellow-400 hover:bg-yellow-200 font-medium rounded-[12px] text-sm w-1/3 h-20 mb-2"
             hx-get="/items"
             // hx-trigger="click"
             hx-target="#replaceMe"

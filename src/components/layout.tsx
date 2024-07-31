@@ -17,8 +17,8 @@ export default function Layout({ children }: { children: JSX.Element }) {
       <body class="min-h-screen flex flex-col justify-between bg-slate-400">
 
         <nav
-          class="relative flex w-full flex-wrap items-center justify-between bg-slate-800 py-2 px-3 shadow-dark-mild lg:py-4">
-            <a href="/" class="ms-2 text-xl font-semibold text-sky-400">Fabric</a>
+          class="relative flex w-full flex-wrap items-center justify-between bg-slate-800 p-4 shadow-dark-mild">
+            <a href="/" class="text-xl font-semibold text-sky-400">Fabric</a>
             <Search/>
         </nav>
 
