@@ -1,9 +1,10 @@
-import { Elysia } from "elysia";
+import { Cookie, Elysia } from "elysia";
 import { html } from '@elysiajs/html'
 import { staticPlugin } from '@elysiajs/static'
 import {PrismaClient} from "@prisma/client";
 import Layout from './components/layout'
 import { Database } from "bun:sqlite";
+import Login from "./components/login";
 
 const database = new Database(":memory:");
 database.exec("PRAGMA journal_mode = WAL;");
@@ -59,6 +60,12 @@ const app = new Elysia()
       </div>
     )
   })
+  .get('/sign-in', ({ set }) => {
+    set.status = 401
+		set.headers['WWW-Authenticate'] = 'Basic'
+    return <Layout><Login/></Layout>
+  })
+  .get('/sign-up', () => 'Sign up')
   .group('/user', app => app
     .get('/:email', async ({ params: { email } }) => {
       const user = await db.user.findUnique({where: { email }})
@@ -67,8 +74,6 @@ const app = new Elysia()
           <p>{user?.email}</p>
         </div>
     })
-    .post('/sign-in', () => 'Sign in')
-    .post('/sign-up', () => 'Sign up')
   )
   .listen(3000);
 

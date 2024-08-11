@@ -4,13 +4,13 @@ export default function Search({ children }: { children?: JSX.Element }) {
       {/* search */}
       <input
         type="search"
-        class="relative block w-[1px] min-w-0 flex-auto rounded border border-solid border-secondary-500 bg-transparent bg-clip-padding p-2 text-base font-normal text-surface transition duration-300 ease-in-out focus:border-primary focus:text-gray-700 focus:shadow-inset focus:outline-none motion-reduce:transition-none dark:border-white/10 dark:bg-zinc-200 dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill"
+        class="relative block w-[1px] min-w-0 flex-auto rounded bg-clip-padding p-2 font-normal text-surface transition duration-300 ease-in-out focus:border-primary focus:text-gray-200 focus:shadow-inset focus:outline-none motion-reduce:transition-none border-white/10 bg-slate-700 text-white placeholder:text-neutral-300 autofill:shadow-autofill"
         placeholder="Search"
         aria-label="Search"
         aria-describedby="button-addon2"
       />
       <span
-        class="absolute right-6 items-center whitespace-nowrap rounded pl-2 text-center text-base font-normal text-gray-600 dark:text-white [&>svg]:w-5"
+        class="absolute right-6 items-center whitespace-nowrap rounded pl-2 text-center font-normal text-gray-600 text-white [&>svg]:w-5"
         id="basic-addon2">
         <svg
           xmlns="http://www.w3.org/2000/svg"

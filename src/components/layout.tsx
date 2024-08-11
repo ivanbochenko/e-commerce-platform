@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: JSX.Element }) {
         <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
         <script src="https://cdn.tailwindcss.com"></script>
       </head>
-      <body class="min-h-screen flex flex-col justify-between bg-slate-400">
+      <body class="min-h-screen flex flex-col justify-between bg-slate-600">
 
         <nav
           class="relative flex w-full flex-wrap items-center justify-between bg-slate-800 p-4 shadow-dark-mild">
