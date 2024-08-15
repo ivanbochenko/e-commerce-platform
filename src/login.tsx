@@ -1,5 +1,5 @@
 export default function Login({ }) {
-  return <section class="flex flex-col items-center justify-center p-4 mx-auto md:h-screen lg:py-0">
+  return <section class="flex flex-col items-center justify-center mx-auto md:h-screen">
       <div class="w-full rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-slate-800 border-gray-700">
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 class="text-xl font-bold leading-tight tracking-tight text-slate-300 md:text-2xl">

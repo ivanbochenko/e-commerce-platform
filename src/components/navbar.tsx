@@ -1,4 +1,15 @@
-export default function Search({ children }: { children?: JSX.Element }) {
+export default function Navbar({logged=false}: {logged: boolean}) {
+  return <nav
+    class="relative flex w-full flex-wrap items-center justify-between bg-slate-800 p-4 shadow-dark-mild">
+      <a href="/" class="text-xl font-semibold text-sky-300">Fabric</a>
+      { logged 
+        ? <Search/>
+        : <a href="/sign-in" class="w-1/8 text-sky-300 bg-slate-700 font-medium rounded-lg text-sm px-4 py-2 text-center">Sign in</a>
+      }
+  </nav>
+}
+
+const Search = () => {
   return (
     <div class="flex w-1/4 items-center justify-between">
       {/* search */}
@@ -25,4 +36,3 @@ export default function Search({ children }: { children?: JSX.Element }) {
     </div>
   );
 }
-

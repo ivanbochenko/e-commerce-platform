@@ -4,7 +4,8 @@ import { staticPlugin } from '@elysiajs/static'
 import {PrismaClient} from "@prisma/client";
 import Layout from './components/layout'
 import { Database } from "bun:sqlite";
-import Login from "./components/login";
+import Login from "./login";
+import Navbar from "./components/navbar";
 
 const database = new Database(":memory:");
 database.exec("PRAGMA journal_mode = WAL;");
@@ -15,35 +16,22 @@ const app = new Elysia()
   .use(html())
   .use(staticPlugin())
   .get("/", async ({ cookie: { key } }) => {
-    key.value = key.value ?? "new key"
-    console.log(key.value)
+    
+    console.log(typeof key.value)
     return (
-      <Layout >
-        <div id="replaceMe" class="flex space-x-4">
-          <button type="button" class="text-white bg-sky-600 hover:bg-sky-700 font-medium rounded-[12px] text-sm w-1/3 h-20 mb-2"
-            hx-get="/items"
-            // hx-trigger="click"
-            hx-target="#replaceMe"
-            hx-swap="outerHTML"
-          >
-            Items
-          </button>
-          <button type="button" class="text-white bg-violet-700 hover:bg-violet-600 font-medium rounded-[12px] text-sm w-1/3 h-20 mb-2"
-            hx-get="/items"
-            // hx-trigger="click"
-            hx-target="#replaceMe"
-            hx-swap="outerHTML"
-          >
-            Items
-          </button>
-          <button type="button" class="text-white bg-yellow-400 hover:bg-yellow-200 font-medium rounded-[12px] text-sm w-1/3 h-20 mb-2"
-            hx-get="/items"
-            // hx-trigger="click"
-            hx-target="#replaceMe"
-            hx-swap="outerHTML"
-          >
-            Items
-          </button>
+      <Layout>
+        <div>
+          <Navbar logged={!!key.value}/>
+          <div id="replaceMe" class="flex m-4 space-x-4">
+            <button type="button" class="text-white bg-slate-700 hover:bg-slate-500 font-medium rounded-[12px] text-sm w-1/3 h-20 mb-2"
+              hx-get="/items"
+              // hx-trigger="click"
+              hx-target="#replaceMe"
+              hx-swap="outerHTML"
+            >
+              Item
+            </button>
+          </div>
         </div>
       </Layout>
     )
