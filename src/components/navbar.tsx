@@ -4,7 +4,7 @@ export default function Navbar({logged=false}: {logged: boolean}) {
       <a href="/" class="text-xl font-semibold text-sky-300">Fabric</a>
       { logged 
         ? <Search/>
-        : <a href="/sign-in" class="w-1/8 text-sky-300 bg-slate-700 font-medium rounded-lg text-sm px-4 py-2 text-center">Sign in</a>
+        : <a href="/sign-in" class="md:w-1/8 sm:w-1/4 text-sky-300 bg-slate-700 font-medium rounded-lg text-sm px-4 py-2 text-center">Sign in</a>
       }
   </nav>
 }
