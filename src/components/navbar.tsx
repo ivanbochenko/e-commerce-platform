@@ -3,8 +3,11 @@ export default function Navbar({logged=false}: {logged: boolean}) {
     class="relative flex w-full flex-wrap items-center justify-between bg-slate-800 p-4 shadow-dark-mild">
       <a href="/" class="text-xl font-semibold text-sky-300">Fabric</a>
       { logged 
-        ? <Search/>
-        : <a href="/sign-in" class="md:w-1/8 sm:w-1/4 text-sky-300 bg-slate-700 font-medium rounded-lg text-sm px-4 py-2 text-center">Sign in</a>
+        ? <a href="/user" class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+            <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+        </a>
+        
+        : <a href="/sign-in" class="w-32 text-sky-300 bg-slate-700 font-medium rounded-lg text-sm px-4 py-2 text-center">Sign in</a>
       }
   </nav>
 }
