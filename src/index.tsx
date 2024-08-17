@@ -23,18 +23,13 @@ const app = new Elysia()
       exp: '30d'
     })
   )
-  .onBeforeHandle(async ({ path, jwt, set, headers, cookie: { id, key }, redirect }) => {
+  .onBeforeHandle(async ({ path, jwt, set, headers, cookie: { auth }, redirect }) => {
 
-    const auth = headers['authorization']
-    const payload = await jwt.verify(auth)
-    if (!payload && path !== '/sign-in') {      
-      return redirect('/sign-in')
+    // const auth = headers['authorization']
+    const payload = await jwt.verify(auth.value)
+    if (!payload && path.startsWith('auth')) {      
+      return redirect('auth/sign-in')
     }
-    const user = await db.user.findUnique({where: {
-      id: id.value
-    }})
-    
-    if (user?.password == key.value) return { user }
   })
   .get("/", async ({  }) => {
     return (
@@ -68,25 +63,29 @@ const app = new Elysia()
       </div>
     )
   })
-  .get('/sign-in', ({ path }) => {
-    return <Layout><Login/></Layout>
-  })
-  .get('/sign-up', () => 'Sign up')
-  .group('/user', app => app
-    .get('/:email', async ({ params: { email } }) => {
-      const user = await db.user.findUnique({where: { email }})
-      return <div>
-          <p>{user?.name}</p>
-          <p>{user?.email}</p>
-        </div>
+  .group('/auth', app => app
+    .get('/sign-in', ({ path }) => {
+      return <Layout><Login/></Layout>
+    })
+    .get('/sign-up', () => 'Sign up')
+    .get('/:email/:password', async ({ set, params: { email, password }, jwt, cookie: { auth } }) => {
+      const user = await db.user.findUnique({ where: { email } })
+      
+      if (!user) {
+        set.status = 401
+        throw new Error('Unauthorized')
+      }
+      const isMatch = await Bun.password.verify(password, user.password)
+      if (!isMatch) {
+        set.status = 401
+        throw new Error('Unauthorized')
+      }
+      auth.set({
+        value: await jwt.sign({ email: user.email })
+      })
+      return 'success'
     })
   )
-  .onError(({ code, error, redirect }) => {
-    if (code === 'VALIDATION') {
-      return redirect('/sign-in')
-    }
-    return new Response(error.toString())
-  })
   .listen(3000);
 
 console.log(
