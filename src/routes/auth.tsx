@@ -1,7 +1,7 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
 import Layout from "../components/layout";
-import Login from "../login";
+import Login from "../components/login";
 import Success from "../components/success";
 import { jwtConfig } from "../jwt";
 
