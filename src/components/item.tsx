@@ -1,14 +1,14 @@
-export default function Item({ name }: {name: string}) {
+export default function Item({ name, id, price }: {name: string, id: string, price: number}) {
   return (
-    <section class="flex flex-col items-center justify-center mx-auto md:h-screen">
     <div class="w-full max-w-sm rounded-lg shadow bg-slate-800">
-        <a href="#">
-            <img class="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" />
+        <a href={'/item/'+ id} class="flex items-center justify-center w-full h-48">
+          {/* <img class="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" /> */}
+            <svg class="w-20 h-20 text-slate-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
+            </svg>
         </a>
         <div class="px-5 pb-5">
-            <a href="#">
-                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{name}</h5>
-            </a>
+            <h5 class="text-xl font-semibold tracking-tight text-slate-100">{name}</h5>
             <div class="flex items-center mt-2.5 mb-5">
                 <div class="flex items-center space-x-1 rtl:space-x-reverse">
                   {[...Array(5)].map((item, i) =>
@@ -19,11 +19,10 @@ export default function Item({ name }: {name: string}) {
                 </div>
             </div>
             <div class="flex items-center justify-between">
-                <span class="text-3xl font-bold text-gray-900 dark:text-white">$599</span>
-                <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Buy</a>
+                <span class="text-3xl font-bold text-slate-100">{price}$</span>
+                <a href="#" class="text-slate-100 bg-slate-600 hover:bg-slate-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Buy</a>
             </div>
         </div>
     </div>
-    </section>
   )
 };

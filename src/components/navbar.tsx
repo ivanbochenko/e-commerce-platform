@@ -1,16 +1,13 @@
-export default function Navbar({logged=false}: {logged: boolean}) {
-  return <nav
-    class="relative flex items-center justify-between bg-slate-800 p-4 shadow">
+export default function Navbar() {
+  return (
+    <nav class="relative flex items-center justify-between bg-slate-800 p-4 shadow">
       <a href="/" class="text-xl font-semibold text-sky-300">Fabric</a>
-      { logged 
-        ? <div class='flex space-x-4'>
-            <Messages count={10}/>
-            <User/>
-          </div>
-        
-        : <a href="/auth/sign-in" class="w-32 text-sky-300 bg-slate-700 font-medium rounded-lg text-sm px-4 py-2 text-center">Sign in</a>
-      }
-  </nav>
+      <div class='flex space-x-4'>
+        <Messages count={10}/>
+        <User/>
+      </div>
+    </nav>
+  )
 }
 
 const User = () => <a href="/user" class="relative w-10 h-10 overflow-hidden bg-slate-600 hover:bg-slate-500 rounded-full">

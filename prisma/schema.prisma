@@ -26,6 +26,7 @@ model Item {
   user        User       @relation(fields: [user_id], references: [id])
   user_id     String
   name        String
+  price       Int
   image       String?
   description String?
 }
