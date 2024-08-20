@@ -11,8 +11,8 @@ export default function Layout({ children }: { children: JSX.Element}) {
         <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
         <script src="https://cdn.tailwindcss.com"></script>
       </head>
-      <body class="min-h-screen flex flex-col justify-between bg-slate-600">
-        <main class="flex-grow">{children}</main>
+      <body class="min-h-screen flex flex-col bg-slate-600">
+        <main>{children}</main>
         <Footer/>
       </body>
     </html>

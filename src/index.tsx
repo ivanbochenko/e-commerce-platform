@@ -9,6 +9,7 @@ import { db } from "./db";
 import { jwtConfig } from "./jwt";
 import { authRoute } from "./routes/auth";
 import Product from "./components/product";
+import { Search } from "./components/Search";
 
 const app = new Elysia()
   .use(html())
@@ -25,14 +26,15 @@ const app = new Elysia()
     const items = await db.item.findMany()
     return (
       <Layout>
-        <div id="replaceMe">
+        <>
           <Navbar/>
-          <div class='grid grid-cols-3 p-16 gap-4 justify-between'>
+          <Search/>
+          <div class='grid grid-cols-3 w-5/6 m-auto gap-8'>
             {items.map( item => 
               <Item {...item}/>
             )}
           </div>
-        </div>
+        </>
       </Layout>
     )
   }

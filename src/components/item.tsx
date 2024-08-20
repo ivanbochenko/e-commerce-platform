@@ -1,6 +1,6 @@
 export default function Item({ name, id, price }: {name: string, id: string, price: number}) {
   return (
-    <div class="w-full max-w-sm rounded-lg shadow bg-slate-800">
+    <div class="w-full rounded-lg shadow bg-slate-800">
         <a href={'/item/'+ id} class="flex items-center justify-center w-full h-48">
           {/* <img class="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" /> */}
             <svg class="w-20 h-20 text-slate-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
