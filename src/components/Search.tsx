@@ -1,6 +1,6 @@
 export const Search = ({}) => {
   return(
-    <form class="max-w-2xl mx-auto">
+    <form class="w-1/2 mx-auto">
       <div class="relative m-4">
         <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
           <svg class="w-4 h-4 text-slate-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">

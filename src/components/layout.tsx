@@ -7,18 +7,30 @@ export default function Layout({ children }: { children: JSX.Element}) {
         <script
           src="https://unpkg.com/htmx.org@1.9.10"
           integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
-          crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
-        <script src="https://cdn.tailwindcss.com"></script>
+          crossorigin="anonymous"/>
+        <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"/>
+        <script src="https://cdn.tailwindcss.com"/>
+        <style>{css}</style>
       </head>
-      <body class="min-h-screen flex flex-col bg-slate-600">
-        <main>{children}</main>
+      <body hx-boost="true" hx-ext="loading-states" class="min-h-screen flex flex-col bg-slate-600">
+        {children}
         <Footer/>
       </body>
     </html>
   );
 }
 
+const css = `
+.htmx-indicator{
+  display:none;
+}
+.htmx-request .htmx-indicator{
+  display:inline;
+}
+.htmx-request.htmx-indicator{
+  display:inline;
+}
+`
 const Footer = () => (
   <footer>
     <div class="bg-slate-800 rounded-lg shadow m-4 w-1/2 mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">

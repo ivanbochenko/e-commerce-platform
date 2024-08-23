@@ -5,3 +5,5 @@ declare module "jwt" {
     id: string;
   }
 }
+
+declare module '*.css';

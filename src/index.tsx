@@ -18,8 +18,9 @@ const app = new Elysia()
   .onBeforeHandle(async ({ path, jwt, cookie: { auth, userId }, redirect }) => {
     const payload = await jwt.verify(auth.value)
     if (!payload && !path.startsWith('/auth')) {
-      return redirect('/auth/sign-in')
+      return redirect('/auth/')
     }
+    // @ts-expect-error
     userId.set({ value: payload.id})
   })
   .get("/", async ({  }) => {
@@ -29,11 +30,11 @@ const app = new Elysia()
         <>
           <Navbar/>
           <Search/>
-          <div class='grid grid-cols-3 w-5/6 m-auto gap-8'>
+          <main class='grid grid-cols-3 w-5/6 mx-auto gap-8'>
             {items.map( item => 
               <Item {...item}/>
             )}
-          </div>
+          </main>
         </>
       </Layout>
     )
@@ -49,6 +50,10 @@ const app = new Elysia()
   })
   .use(userRoute)
   .use(authRoute)
+  .onRequest(({ request }) => {
+      console.log(`Request received: ${request.method}: ${request.url}`);
+    }
+  )
   .listen(3000);
 
 console.log(
