@@ -1,15 +1,16 @@
 import { Elysia, t } from "elysia";
 import { html } from '@elysiajs/html'
 import { staticPlugin } from '@elysiajs/static'
-import Layout from './components/layout'
-import Navbar from "./components/navbar";
-import Item from "./components/item";
-import { userRoute } from "./routes/user";
+import Layout from './views/layout'
+import Navbar from "./views/navbar";
+import Item from "./views/item";
+import { userRoute } from "./controllers/user";
 import { db } from "./db";
 import { jwtConfig } from "./jwt";
-import { authRoute } from "./routes/auth";
-import Product from "./components/product";
-import { Search } from "./components/Search";
+import { authRoute } from "./controllers/auth";
+import Product from "./views/product";
+import { Search } from "./views/Search";
+import { chatRoute } from "./controllers/chat";
 
 const app = new Elysia()
   .use(html())
@@ -50,6 +51,7 @@ const app = new Elysia()
   })
   .use(userRoute)
   .use(authRoute)
+  .use(chatRoute)
   .onRequest(({ request }) => {
       console.log(`Request received: ${request.method}: ${request.url}`);
     }

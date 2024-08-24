@@ -1,7 +1,7 @@
 import Elysia from "elysia"
-import User from "../components/user";
+import User from "../views/user";
 import { db } from "../db";
-import Layout from "../components/layout";
+import Layout from "../views/layout";
 
 export const userRoute = new Elysia({prefix: '/user'})
   .get('/', async ({ cookie : { userId }}) => {

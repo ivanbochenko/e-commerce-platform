@@ -1,4 +1,4 @@
-import {PrismaClient} from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { Database } from "bun:sqlite";
 
 const database = new Database(":memory:");

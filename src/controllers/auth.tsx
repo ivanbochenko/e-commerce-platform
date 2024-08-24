@@ -1,8 +1,8 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
-import Layout from "../components/layout";
-import { Login, Forgot } from "../components/login";
-import { Success, Error } from "../components/msg";
+import Layout from "../views/layout";
+import { Login, Forgot, Register } from "../views/login";
+import { Message } from "../views/components";
 import { jwtConfig } from "../jwt";
 import { sendEmail } from "../mail";
 
@@ -16,26 +16,31 @@ export const authRoute = new Elysia({prefix: '/auth'})
     // await new Promise(res => setTimeout(res, 2000))
     if (!user) {
       set.status = 401
-      return <Error message="User not found"/>
+      return <Message success={false} text="User not found"/>
     }
 
     const isMatch = await Bun.password.verify(password, user.password)
     if (!isMatch) {
       set.status = 401
-      return <Error message="Wrong password"/>
+      return <Message  success={false} text="Wrong password"/>
     }
     
     auth.set({
       value: await jwt.sign({ id: user.id })
     })
-    return <Success/>
+    return <Message success text={'Signed!'}/>
   }, {
     body: t.Object({
       email: t.String(),
       password: t.String()
     })
   })
-  .get('/sign-up', () => 'Sign up')
+  .get('/sign-up', () => <Layout><Register/></Layout>)
+  .post('register', async () => {
+    await new Promise(res => setTimeout(res, 2000))
+
+    return <Message success text={'Signed!'}/>
+  })
   .get('/forgot-password', () => {
     return <Layout><Forgot/></Layout>
   })
@@ -48,10 +53,10 @@ export const authRoute = new Elysia({prefix: '/auth'})
         data: { password: hash }
       })
       if (!updatedUser) {
-        return <Error message='User does not exist'/>
+        return <Message  success={false} text='User does not exist'/>
       }
       sendEmail(email, updatedUser?.name!, password)
-      return <Success message='Check email'/>
+      return <Message success text='Check email'/>
     },
     {
       body: t.Object({
