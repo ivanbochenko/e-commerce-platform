@@ -1,4 +1,4 @@
-export default function Layout({ children }: { children: JSX.Element}) {
+export const Layout = ({ children }: { children: JSX.Element}) => {
   return (
     <html>
       <head>
@@ -14,7 +14,6 @@ export default function Layout({ children }: { children: JSX.Element}) {
       </head>
       <body hx-boost="true" hx-ext="loading-states" class="min-h-screen flex flex-col bg-slate-600">
         {children}
-        <Footer/>
       </body>
     </html>
   );
@@ -31,7 +30,7 @@ const css = `
   display:inline;
 }
 `
-const Footer = () => (
+export const Footer = () => (
   <footer>
     <div class="bg-slate-800 rounded-lg shadow m-4 w-1/2 mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
       <span class="text-gray-500 sm:text-center">

@@ -1,6 +1,6 @@
 import Elysia from "elysia"
 import { db } from "../db";
-import Layout from "../views/layout";
+import { Layout } from "../views/layout";
 import { Chat } from "../views/chat";
 
 export const chatRoute = new Elysia({prefix: '/chat'})

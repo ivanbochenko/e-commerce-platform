@@ -1,4 +1,4 @@
-export default function Navbar() {
+export const Navbar = () => {
   return (
     <nav class="relative flex items-center justify-between bg-slate-800 p-4 shadow">
       <a href="/" class="text-xl font-semibold text-sky-300">Fabric</a>

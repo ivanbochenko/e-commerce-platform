@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
-import Layout from "../views/layout";
+import { Layout } from "../views/layout";
 import { Login, Forgot, Register } from "../views/login";
 import { Message } from "../views/components";
 import { jwtConfig } from "../jwt";

@@ -1,16 +1,16 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 import { html } from '@elysiajs/html'
 import { staticPlugin } from '@elysiajs/static'
-import Layout from './views/layout'
-import Navbar from "./views/navbar";
-import Item from "./views/item";
+import { Layout, Footer } from './views/layout'
+import { Navbar } from "./views/navbar";
+import { Item } from "./views/item";
 import { userRoute } from "./controllers/user";
 import { db } from "./db";
 import { jwtConfig } from "./jwt";
 import { authRoute } from "./controllers/auth";
-import Product from "./views/product";
-import { Search } from "./views/Search";
+import { Product } from "./views/product";
 import { chatRoute } from "./controllers/chat";
+import { Search } from "./views/search";
 
 const app = new Elysia()
   .use(html())
@@ -36,6 +36,7 @@ const app = new Elysia()
               <Item {...item}/>
             )}
           </main>
+          <Footer/>
         </>
       </Layout>
     )

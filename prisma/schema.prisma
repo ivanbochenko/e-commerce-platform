@@ -17,8 +17,7 @@ model User {
   password    String
   name        String?
   items       Item[]
-  message_out Message[] @relation("author")
-  message_in  Message[] @relation("receiver")
+  messages    Message[] @relation("author")
 }
 
 model Item {
@@ -29,6 +28,7 @@ model Item {
   price       Int
   image       String?
   description String?
+  messages    Message[]  @relation("item")
 }
 
 model Message {
@@ -37,6 +37,6 @@ model Message {
   text        String
   author      User     @relation("author", fields: [author_id], references: [id], onDelete: Cascade)
   author_id   String
-  receiver    User     @relation("receiver", fields: [receiver_id], references: [id], onDelete: Cascade)
-  receiver_id String
+  item        Item     @relation("item", fields: [item_id], references: [id], onDelete: Cascade)
+  item_id     String
 }
