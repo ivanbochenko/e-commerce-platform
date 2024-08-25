@@ -9,6 +9,7 @@ import { authRoute } from "./controllers/auth";
 import { Product } from "./views/product";
 import { chatRoute } from "./controllers/chat";
 import { Item, Search } from "./views/components";
+import { productRoute } from "./controllers/product";
 
 const app = new Elysia()
   .use(html())
@@ -51,6 +52,7 @@ const app = new Elysia()
   .use(userRoute)
   .use(authRoute)
   .use(chatRoute)
+  .use(productRoute)
   .onRequest(({ request }) => {
       console.log(`Request received: ${request.method}: ${request.url}`);
     }
