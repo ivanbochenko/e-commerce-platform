@@ -1,4 +1,4 @@
-import { BagIcon, SendIcon, ShopIcon } from "./Icons"
+import { BagIcon, MessageIcon, SendIcon, ShopIcon } from "./Icons"
 
 export const Chat = ({}) => {
   return<>
@@ -37,9 +37,7 @@ export const Chat = ({}) => {
 
 const MessageBubble = ({name, time, message}: {name: string, time: Date, message: string}) => {
   return <div class="flex items-start gap-2">
-    <svg class="w-8 h-8 rounded-full text-slate-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-    <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
-    </svg>
+    <MessageIcon/>
     <div class="flex flex-col gap-1 w-full max-w-[320px]">
         <div class="flex items-center space-x-2 rtl:space-x-reverse">
           <span class="text-sm font-semibold text-slate-100">{name}</span>
