@@ -1,8 +1,7 @@
 import { Elysia } from "elysia";
 import { html } from '@elysiajs/html'
 import { staticPlugin } from '@elysiajs/static'
-import { Layout, Footer } from './views/layout'
-import { Navbar } from "./views/navbar";
+import { Layout, Footer, Navbar } from './views/layout'
 import { Item } from "./views/item";
 import { userRoute } from "./controllers/user";
 import { db } from "./db";
