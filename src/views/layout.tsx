@@ -1,5 +1,17 @@
 import { MessagesIcon, ProfileIcon } from "./Icons"
 
+const css = `
+.htmx-indicator{
+  display:none;
+}
+.htmx-request .htmx-indicator{
+  display:inline;
+}
+.htmx-request.htmx-indicator{
+  display:inline;
+}
+`
+
 export const Layout = ({ children }: { children: JSX.Element}) => {
   return (
     <html>
@@ -21,18 +33,6 @@ export const Layout = ({ children }: { children: JSX.Element}) => {
   );
 }
 
-const css = `
-.htmx-indicator{
-  display:none;
-}
-.htmx-request .htmx-indicator{
-  display:inline;
-}
-.htmx-request.htmx-indicator{
-  display:inline;
-}
-`
-
 export const Navbar = () => {
   return (
     <nav class="relative flex items-center justify-between bg-slate-800 p-4 shadow">
@@ -51,6 +51,7 @@ export const Navbar = () => {
     </nav>
   )
 }
+
 export const Footer = () => (
   <footer>
     <div class="bg-slate-800 rounded-lg shadow m-4 w-1/2 mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
