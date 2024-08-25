@@ -2,14 +2,13 @@ import { Elysia } from "elysia";
 import { html } from '@elysiajs/html'
 import { staticPlugin } from '@elysiajs/static'
 import { Layout, Footer, Navbar } from './views/layout'
-import { Item } from "./views/item";
 import { userRoute } from "./controllers/user";
 import { db } from "./db";
 import { jwtConfig } from "./jwt";
 import { authRoute } from "./controllers/auth";
 import { Product } from "./views/product";
 import { chatRoute } from "./controllers/chat";
-import { Search } from "./views/search";
+import { Item, Search } from "./views/components";
 
 const app = new Elysia()
   .use(html())
