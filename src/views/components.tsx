@@ -1,6 +1,6 @@
 import { ImagePlaceholderIcon, SearchIcon, StarIcon } from "./Icons";
 
-export const Message = ({text, success}: {text: string, success: boolean}) => {
+export const ServerMessage = ({text, success}: {text: string, success: boolean}) => {
   return <div class="w-full rounded-lg">
       <div class="flex flex-col items-center pb-10">
       <span class={success ? "text-xl m-5 text-green-400" : "text-xl m-5 text-red-400"}>{text}</span>
@@ -36,7 +36,7 @@ export const Item = ({ name, id, price }: {name: string, id: string, price: numb
             </div>
             <div class="flex items-center justify-between">
                 <span class="text-3xl font-bold text-slate-100">{price}$</span>
-                <a href="#" class="text-slate-100 bg-slate-600 hover:bg-slate-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Buy</a>
+                <button class="text-slate-100 bg-slate-600 hover:bg-slate-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-300">Buy</button>
             </div>
         </div>
     </div>

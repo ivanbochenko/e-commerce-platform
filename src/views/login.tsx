@@ -54,7 +54,7 @@ export const Register = ({ }) => {
       <div class="w-full rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 bg-slate-800">
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 class="text-xl font-bold leading-tight tracking-tight text-slate-300 md:text-2xl">
-                  Forgot password
+                  Create account
               </h1>
               <form hx-post="/auth/register" class="space-y-4 md:space-y-6" >
                   <div>

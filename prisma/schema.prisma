@@ -15,9 +15,10 @@ model User {
   created     DateTime  @default(now())
   email       String    @unique
   password    String
-  name        String?
+  name        String
   items       Item[]
   messages    Message[] @relation("author")
+  trades      Trade[]   @relation("user")
 }
 
 model Item {
@@ -28,7 +29,7 @@ model Item {
   price       Int
   image       String?
   description String?
-  messages    Message[]  @relation("item")
+  trades      Trade[]    @relation("product")
 }
 
 model Message {
@@ -37,6 +38,15 @@ model Message {
   text        String
   author      User     @relation("author", fields: [author_id], references: [id], onDelete: Cascade)
   author_id   String
-  item        Item     @relation("item", fields: [item_id], references: [id], onDelete: Cascade)
+  trade       Trade    @relation("trade", fields: [trade_id], references: [id], onDelete: Cascade)
+  trade_id    String
+}
+
+model Trade {
+  id          String   @id @default(uuid())
+  user        User     @relation("user", fields: [user_id], references: [id], onDelete: Cascade)
+  user_id     String
+  item        Item     @relation("product", fields: [item_id], references: [id], onDelete: Cascade)
   item_id     String
+  messages    Message[]@relation("trade")
 }
