@@ -1,7 +1,6 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
-import { Layout, Navbar } from "../views/layout";
-import { ChatBuying, ChatSelling, MessageBubble, MessageInput } from "../views/chat";
+import { ChatLayout, MessageBubble, MessageInput } from "../views/chat";
 import { MessageIcon } from "../views/Icons";
 
 export const chatRoute = new Elysia({prefix: '/chat'})
@@ -19,23 +18,21 @@ export const chatRoute = new Elysia({prefix: '/chat'})
         }
       }
     })
-  
-    const purchasesList = purchases.map( p =>
-      <button
-        hx-get={"/chat/buying/" + p.item.id}
-        hx-target='#chatPlaceholder'
-        class="flex w-full items-center p-2 text-slate-100"
-      >
-        <MessageIcon/>
-        <span class="ms-2">{p.item.name}</span>
-      </button>
-    )
 
-    return <Layout>
-      <ChatBuying>
-        <>{purchasesList}</>
-      </ChatBuying>
-    </Layout>
+    return <ChatLayout buying={true}>
+      <>
+        {purchases.map( p =>
+          <button
+            hx-get={"/chat/buying/" + p.item.id}
+            hx-target='#chatPlaceholder'
+            class="flex w-full items-center p-2 text-slate-100"
+          >
+            <MessageIcon/>
+            <span class="ms-2">{p.item.name}</span>
+          </button>
+        )}
+      </>
+    </ChatLayout>
   })
   .get('/selling', async ({ cookie: {userId}}) => {
     const listings = await db.trade.findMany({
@@ -53,23 +50,21 @@ export const chatRoute = new Elysia({prefix: '/chat'})
         }
       }
     })
-  
-    const sellingList = listings.map( l =>
-      <button
-        hx-get={"/chat/selling/" + l.item.id}
-        hx-target='#chatPlaceholder'
-        class="flex w-full items-center p-2 text-slate-100"
-      >
-        <MessageIcon/>
-        <span class="ms-2">{l.item.name}</span>
-      </button>
-    )
 
-    return <Layout>
-      <ChatSelling>
-        <>{sellingList}</>
-      </ChatSelling>
-    </Layout>
+    return <ChatLayout buying={false}>
+      <>
+        {listings.map( l =>
+          <button
+            hx-get={"/chat/selling/" + l.item.id}
+            hx-target='#chatPlaceholder'
+            class="flex w-full items-center p-2 text-slate-100"
+          >
+            <MessageIcon/>
+            <span class="ms-2">{l.item.name}</span>
+          </button>
+        )}
+      </>
+    </ChatLayout>
   })
   .get('/buying/:item_id', async ({ cookie: { userId }, params: { item_id }}) => {
     const trades = await db.trade.findFirst({
@@ -91,7 +86,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
 
     if (!trades) return <h1>No messages!</h1>
 
-    const messages = trades?.messages.map( m => 
+    const messages = trades.messages.map( m => 
       <MessageBubble name={m.author.name} {...m}/>
     )
     return <div class="flex flex-col h-full w-full justify-end">

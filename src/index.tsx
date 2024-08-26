@@ -30,7 +30,7 @@ const app = new Elysia()
           <Navbar/>
           <Search/>
           <main class='grid grid-cols-3 w-5/6 mx-auto gap-8'>
-            {items.map( item => 
+            {items.map( item =>
               <Item {...item}/>
             )}
           </main>
@@ -53,3 +53,4 @@ const app = new Elysia()
 console.log(
   `🧶 Fabric is running at ${app.server?.hostname}:${app.server?.port}`
 );
+

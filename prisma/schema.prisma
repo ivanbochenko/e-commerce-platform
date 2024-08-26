@@ -27,7 +27,7 @@ model Item {
   user_id     String
   name        String
   price       Int
-  image       String?
+  image       String
   description String?
   trades      Trade[]    @relation("product")
 }

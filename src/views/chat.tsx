@@ -1,61 +1,33 @@
 import { AngleLeftIcon, AvatarIcon, BagIcon, SendIcon, ShopIcon } from "./Icons"
+import { Layout } from "./layout"
 
-export const ChatBuying = ({children}: {children: JSX.Element}) => {
-  return<div class='flex flex-row h-dvh'>
-    <div class="h-full p-4 space-y-2 divide-y-2 divide-slate-600 bg-slate-800 font-medium">
-
-      <div class='flex'>
-        <div class="flex w-1/2 p-2 text-slate-300">
-          <BagIcon/>
-          <span class="flex ms-2">Buying</span>
+export const ChatLayout = ({children, buying}: {children: JSX.Element, buying: boolean}) => {
+  const activeStyle = 'flex w-1/2 p-2 text-slate-300 cursor-default'
+  const passiveStyle = 'flex w-1/2 p-2 text-slate-300 bg-slate-600 hover:bg-slate-500 rounded-lg'
+  return <Layout>
+    <div class='flex flex-row h-dvh'>
+      <div class="h-full p-4 space-y-2 divide-y-2 divide-slate-600 bg-slate-800 font-medium">
+        <div class='flex'>
+          <a href="/chat" class={buying ? activeStyle : passiveStyle}>
+            <BagIcon/>
+            <span class="flex ms-2">Buying</span>
+          </a>
+          <a href="/chat/selling" class={!buying ? activeStyle : passiveStyle}>
+            <ShopIcon/>
+            <span class="flex ms-2">Selling</span>
+          </a>
         </div>
-        <a href="/chat/selling" class="flex w-1/2 p-2 text-slate-300 bg-slate-600 hover:bg-slate-500 rounded-lg">
-          <ShopIcon/>
-          <span class="flex ms-2">Selling</span>
+        {children}
+      </div>
+      <div id='chatPlaceholder' class='flex flex-col w-full items-center justify-around'>
+        <h1 class="text-xl font-bold text-slate-300">Select chat</h1>
+        <a href="/" class='flex animate-pulse p-2 bg-slate-800 items-center justify-center rounded-full'>
+          <AngleLeftIcon/>
+          <h1 class="me-2 text-xl font-bold text-slate-300">Home</h1>
         </a>
       </div>
-
-      {children}
-
     </div>
-    <div id='chatPlaceholder' class='flex flex-col w-full items-center justify-around'>
-      <h1 class="text-xl font-bold text-slate-300">Select chat</h1>
-      
-      <a href="/" class='flex animate-pulse p-2 bg-slate-800 items-center justify-center rounded-full'>
-        <AngleLeftIcon/>
-        <h1 class="me-2 text-xl font-bold text-slate-300">Home</h1>
-      </a>
-    </div>
-  </div>
-}
-
-export const ChatSelling = ({children}: {children: JSX.Element}) => {
-  return<div class='flex flex-row h-dvh'>
-    <div class="h-full p-4 space-y-2 divide-y-2 divide-slate-600 bg-slate-800 font-medium">
-
-      <div class='flex'>
-        <a href="/chat" class="flex w-1/2 p-2 text-slate-300 bg-slate-600 hover:bg-slate-500 rounded-lg">
-          <BagIcon/>
-          <span class="flex ms-2">Buying</span>
-        </a>
-        <div class="flex w-1/2 p-2 text-slate-300">
-          <ShopIcon/>
-          <span class="flex ms-2">Selling</span>
-        </div>
-      </div>
-
-      {children}
-
-    </div>
-    <div id='chatPlaceholder' class='flex flex-col w-full items-center justify-around'>
-      <h1 class="text-xl font-bold text-slate-300">Select chat</h1>
-      
-      <a href="/" class='flex animate-pulse p-2 bg-slate-800 items-center justify-center rounded-full'>
-        <AngleLeftIcon/>
-        <h1 class="me-2 text-xl font-bold text-slate-300">Home</h1>
-      </a>
-    </div>
-  </div>
+  </Layout>
 }
 
 export const MessageInput = ({trade_id}: {trade_id: string}) => {

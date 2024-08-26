@@ -20,19 +20,26 @@ export const Button = ({message}: {message?: string}) => {
     </button>
 }
 
-export const Item = ({ name, id, price }: {name: string, id: string, price: number}) => {
+export const Stars = ({num}: {num: number}) => {
+  return <div class="flex items-center space-x-1 rtl:space-x-reverse">
+    {[...Array(5)].map((item, i) => <StarIcon filled={i < num}/>)}
+  </div>
+}
+
+export const Item = ({ name, id, price, image }: {name: string, id: string, price: number, image: string}) => {
   return (
     <div class="w-full rounded-lg shadow bg-slate-800">
         <a href={'/product/'+ id} class="flex items-center justify-center w-full h-48">
-          {/* <img class="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" /> */}
-          <ImagePlaceholderIcon/>
+          { image
+            ? <img class="p-8 rounded-t-lg" src={image} alt="product image"/>
+            : <ImagePlaceholderIcon/>
+          }
+          
         </a>
         <div class="px-5 pb-5">
             <h5 class="text-xl font-semibold tracking-tight text-slate-100">{name}</h5>
             <div class="flex items-center mt-2.5 mb-5">
-                <div class="flex items-center space-x-1 rtl:space-x-reverse">
-                  {[...Array(5)].map((item, i) => <StarIcon filled={i < 4}/>)}
-                </div>
+              <Stars num={4}/>
             </div>
             <div class="flex items-center justify-between">
                 <span class="text-3xl font-bold text-slate-100">{price}$</span>
@@ -48,7 +55,7 @@ export const Search = ({}) => {
     <form class="w-1/2 mx-auto">
       <div class="relative m-4">
         <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
-        <SearchIcon/>
+          <SearchIcon/>
         </div>
         <input type="search" id="default-search" class="block w-full p-4 ps-12 text-slate-100 font-normal transition duration-300 ease-in-out rounded-lg bg-slate-700 focus:outline-none" placeholder="Search" required />
       </div>
