@@ -1,4 +1,4 @@
-import { AvatarIcon, BagIcon, SendIcon, ShopIcon } from "./Icons"
+import { AngleLeftIcon, AvatarIcon, BagIcon, SendIcon, ShopIcon } from "./Icons"
 
 export const ChatBuying = ({children}: {children: JSX.Element}) => {
   return<div class='flex flex-row h-dvh'>
@@ -18,8 +18,13 @@ export const ChatBuying = ({children}: {children: JSX.Element}) => {
       {children}
 
     </div>
-    <div id='chatPlaceholder' class='flex w-full items-center justify-center'>
-      <h1 class="mb-4 text-xl font-bold leading-none tracking-tight text-slate-300">Select chat</h1>
+    <div id='chatPlaceholder' class='flex flex-col w-full items-center justify-around'>
+      <h1 class="text-xl font-bold text-slate-300">Select chat</h1>
+      
+      <a href="/" class='flex animate-pulse p-2 bg-slate-800 items-center justify-center rounded-full'>
+        <AngleLeftIcon/>
+        <h1 class="me-2 text-xl font-bold text-slate-300">Home</h1>
+      </a>
     </div>
   </div>
 }
@@ -42,8 +47,13 @@ export const ChatSelling = ({children}: {children: JSX.Element}) => {
       {children}
 
     </div>
-    <div id='chatPlaceholder' class='flex w-full items-center justify-center'>
-      <h1 class="mb-4 text-xl font-bold leading-none tracking-tight text-slate-300">Select chat</h1>
+    <div id='chatPlaceholder' class='flex flex-col w-full items-center justify-around'>
+      <h1 class="text-xl font-bold text-slate-300">Select chat</h1>
+      
+      <a href="/" class='flex animate-pulse p-2 bg-slate-800 items-center justify-center rounded-full'>
+        <AngleLeftIcon/>
+        <h1 class="me-2 text-xl font-bold text-slate-300">Home</h1>
+      </a>
     </div>
   </div>
 }
@@ -62,13 +72,13 @@ export const MessageInput = ({trade_id}: {trade_id: string}) => {
 }
 
 export const MessageBubble = ({name, time, text}: {name: string, time: Date, text: string}) => {
-  return <div class="flex items-start m-2 gap-2">
+  return <div class="flex items-start ms-4 my-2 gap-2">
     <AvatarIcon w={8} h={8}/>
     <div class="flex flex-col gap-1 w-full max-w-[320px]">
         <span class="text-sm font-semibold text-slate-100">{name}</span>
         <div class="flex flex-col me-auto leading-2 p-2 bg-slate-700 rounded-e-xl rounded-es-xl">
           <p class="text-sm font-normal text-slate-100">{text}</p>
-          <span class="text-sm font-normal text-slate-500">
+          <span class="text-sm font-normal text-slate-400">
             {time.getHours()}:{(time.getMinutes() < 10 ? '0' : '') + time.getMinutes()}
           </span>
         </div>

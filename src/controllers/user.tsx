@@ -1,7 +1,7 @@
 import Elysia from "elysia"
 import { User } from "../views/user";
 import { db } from "../db";
-import { Layout } from "../views/layout";
+import { Footer, Layout, Navbar } from "../views/layout";
 
 export const userRoute = new Elysia({prefix: '/user'})
   .get('/', async ({ cookie : { userId }}) => {
@@ -9,7 +9,13 @@ export const userRoute = new Elysia({prefix: '/user'})
     if (!user) {
       throw new Error('Not found')
     }
-    return <Layout><User name={user.name!} email={user?.email}/></Layout>
+    return <Layout>
+      <>
+        <Navbar/>
+        <User name={user.name!} email={user?.email}/>
+        <Footer/>
+      </>
+    </Layout>
   })
   .get('/:email', async ({params: { email }}) => {
     const user = await db.user.findUnique({where: {email}})

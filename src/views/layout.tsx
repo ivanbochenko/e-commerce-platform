@@ -27,7 +27,9 @@ export const Layout = ({ children }: { children: JSX.Element}) => {
         <style>{css}</style>
       </head>
       <body hx-boost="true" hx-ext="loading-states" class="min-h-screen flex flex-col bg-slate-600">
+        {/* <Navbar/> */}
         {children}
+        {/* <Footer/> */}
       </body>
     </html>
   );
@@ -35,7 +37,7 @@ export const Layout = ({ children }: { children: JSX.Element}) => {
 
 export const Navbar = () => {
   return (
-    <nav class="relative flex items-center justify-between bg-slate-800 p-4 shadow">
+    <nav class="relative flex items-center justify-between bg-slate-800 p-4">
       <a href="/" class="text-xl font-semibold text-sky-200">Fabric</a>
       <div class='flex space-x-4'>
         <a href="/chat" class="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-slate-600 rounded-lg hover:bg-slate-500 ">

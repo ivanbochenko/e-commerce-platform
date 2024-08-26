@@ -23,7 +23,7 @@ export const Button = ({message}: {message?: string}) => {
 export const Item = ({ name, id, price }: {name: string, id: string, price: number}) => {
   return (
     <div class="w-full rounded-lg shadow bg-slate-800">
-        <a href={'/item/'+ id} class="flex items-center justify-center w-full h-48">
+        <a href={'/product/'+ id} class="flex items-center justify-center w-full h-48">
           {/* <img class="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" /> */}
           <ImagePlaceholderIcon/>
         </a>

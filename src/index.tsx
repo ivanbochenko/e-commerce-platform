@@ -6,7 +6,6 @@ import { userRoute } from "./controllers/user";
 import { db } from "./db";
 import { jwtConfig } from "./jwt";
 import { authRoute } from "./controllers/auth";
-import { Product } from "./views/product";
 import { chatRoute } from "./controllers/chat";
 import { Item, Search } from "./views/components";
 import { productRoute } from "./controllers/product";
@@ -41,14 +40,6 @@ const app = new Elysia()
     )
   }
   )
-  .get('/item/:id', async ({params: { id }}) => {
-    const item = await db.item.findUnique({where: { id }})
-    if (!item) {
-      throw new Error('Not found')
-    }
-    return <Layout><Product/></Layout>
-    // return <Item name={item.name} id={item.id} />
-  })
   .use(userRoute)
   .use(authRoute)
   .use(chatRoute)

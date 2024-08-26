@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
-import { Layout } from "../views/layout";
+import { Layout, Navbar } from "../views/layout";
 import { ChatBuying, ChatSelling, MessageBubble, MessageInput } from "../views/chat";
 import { MessageIcon } from "../views/Icons";
 
@@ -20,7 +20,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       }
     })
   
-    const purchasesList = <>{purchases.map( p =>
+    const purchasesList = purchases.map( p =>
       <button
         hx-get={"/chat/buying/" + p.item.id}
         hx-target='#chatPlaceholder'
@@ -29,7 +29,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
         <MessageIcon/>
         <span class="ms-2">{p.item.name}</span>
       </button>
-    )}</>
+    )
 
     return <Layout>
       <ChatBuying>
@@ -95,8 +95,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       <MessageBubble name={m.author.name} {...m}/>
     )
     return <div class="flex flex-col h-full w-full justify-end">
-      <div class='flex flex-col-reverse overflow-auto ms-4'>
-
+      <div class='flex flex-col-reverse overflow-auto'>
         {messages}
       </div>
       <div class='ms-4 mb-4'>
@@ -125,7 +124,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     const messages = trades.messages.map( m => 
       <MessageBubble name={m.author.name} {...m}/>
     )
-    return <div class="flex flex-col h-full w-full p-4 justify-end">
+    return <div class="flex flex-col h-full w-full justify-end">
       <div class='flex flex-col-reverse overflow-auto'>
         {messages}
       </div>
