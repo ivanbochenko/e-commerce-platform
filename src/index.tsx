@@ -14,13 +14,11 @@ const app = new Elysia()
   .use(html())
   .use(staticPlugin())
   .use(jwtConfig)
-  .onBeforeHandle(async ({ path, jwt, cookie: { auth, userId }, redirect }) => {
+  .onBeforeHandle(async ({ path, jwt, cookie: { auth }, redirect }) => {
     const payload = await jwt.verify(auth.value)
     if (!payload && !path.startsWith('/auth')) {
       return redirect('/auth/')
     }
-    // @ts-expect-error
-    userId.set({ value: payload.id})
   })
   .get("/", async ({  }) => {
     const items = await db.item.findMany()

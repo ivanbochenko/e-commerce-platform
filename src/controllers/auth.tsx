@@ -28,6 +28,8 @@ export const authRoute = new Elysia({prefix: '/auth'})
     auth.set({
       value: await jwt.sign({ id: user.id })
     })
+    // @ts-expect-error
+    userId.set({ value: payload.id})
     return <ServerMessage success text={'Signed!'}/>
   }, {
     body: t.Object({
