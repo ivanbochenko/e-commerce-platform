@@ -14,7 +14,7 @@ export const sendEmail = (to: string, name: string, password: string) => {
   const config = {
     from: process.env.EMAIL_USERNAME,
     to,
-    subject: 'Woogie password reset',
+    subject: `${process.env.APP_NAME} password reset`,
     text: `Hi ${name}, you requested to reset your password. Your new password is: ${password}`,
   }
 
