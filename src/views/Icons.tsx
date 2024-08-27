@@ -1,5 +1,5 @@
 export const AvatarIcon = ({w, h}: {w:number, h:number}) => {
-  const style = `w-${w} h-${h} rounded-full text-slate-100`
+  const style = `w-${w} h-${h} rounded-full text-slate-300`
   return <svg class={style} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
   <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
   </svg>

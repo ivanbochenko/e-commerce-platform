@@ -35,60 +35,7 @@ export const Product = ({ }) => {
 
                   <h5 class="font-manrope font-semibold text-2xl leading-9 text-gray-900 ">$ 199.00 </h5>
                   <Stars num={4}/>
-                      
-                  <p class="font-medium text-lg text-gray-900 mb-2">Color</p>
-                  <div class="grid grid-cols-3 gap-3 mb-6 max-w-sm">
-                      <div class="color-box group">
-                          <div>
-                              <img src="https://pagedone.io/asset/uploads/1700472379.png"
-                                  alt="Summer Travel Bag image"
-                                  class="min-[400px]:h-[100px] aspect-square border-2 border-gray-100 rounded-xl transition-all duration-500 group-hover:border-indigo-600 border border-gray-300 rounded-lg"
-                                  />
-                              <p
-                                  class="font-normal text-sm leading-6 text-gray-400 text-center mt-2 group-hover:text-indigo-600 ">
-                                  Black</p>
-                          </div>
-                      </div>
-
-                      <div class="color-box group">
-                          <div>
-                              <img src="https://pagedone.io/asset/uploads/1700472517.png"
-                                  alt="Summer Travel Bag image"
-                                  class="border-2 border-gray-100 rounded-xl transition-all duration-500 group-hover:border-indigo-600 border border-gray-300 rounded-lg"
-                                />
-                              <p
-                                  class="font-normal text-sm leading-6 text-gray-400 text-center mt-2 group-hover:text-indigo-600 ">
-                                  Brown</p>
-                          </div>
-                      </div>
-
-                      <div class="color-box group">
-                          <div>
-                              <img src="https://pagedone.io/asset/uploads/1700472529.png"
-                                  alt="Summer Travel Bag image"
-                                  class="border-2 border-gray-100 rounded-xl transition-all duration-500 group-hover:border-indigo-600 border border-gray-300 rounded-lg"
-                                  />
-                              <p
-                                  class="font-normal text-sm leading-6 text-gray-400 text-center mt-2 group-hover:text-indigo-600 ">
-                                  Beige</p>
-                          </div>
-                      </div>
-                  </div>
-                  <p class="font-medium text-lg text-gray-900 mb-2">Size (KG)</p>
-                  <div class="grid grid-cols-2 min-[400px]:grid-cols-4 gap-3 mb-3 min-[400px]:mb-8">
-                      <button
-                          class="border border-gray-200 whitespace-nowrap text-gray-900 text-sm leading-6 py-2.5 rounded-full px-5 text-center w-full font-semibold shadow-sm shadow-transparent transition-all duration-300 hover:bg-gray-50 hover:shadow-gray-300">Full
-                          Set</button>
-                      <button
-                          class="border border-gray-200 whitespace-nowrap text-gray-900 text-sm leading-6 py-2.5 rounded-full px-5 text-center w-full font-semibold shadow-sm shadow-transparent transition-all duration-300 hover:bg-gray-50 hover:shadow-gray-300">
-                          10 kg</button>
-                      <button
-                          class="border border-gray-200 whitespace-nowrap text-gray-900 text-sm leading-6 py-2.5 rounded-full px-5 text-center w-full font-semibold shadow-sm shadow-transparent transition-all duration-300 hover:bg-gray-50 hover:shadow-gray-300">
-                          25 kg</button>
-                      <button
-                          class="border border-gray-200 whitespace-nowrap text-gray-900 text-sm leading-6 py-2.5 rounded-full px-5 text-center w-full font-semibold shadow-sm shadow-transparent transition-all duration-300 hover:bg-gray-50 hover:shadow-gray-300">
-                          35 kg</button>
-                  </div>
+                  
                   <div class="flex items-center flex-col min-[400px]:flex-row gap-3 mb-3 min-[400px]:mb-8">
                       <div class=" flex items-center justify-center rounded-full">
                           <button

@@ -5,7 +5,7 @@ import { Product } from "../views/product";
 import { NotFound } from "../views/components";
 
 export const productRoute = new Elysia({prefix: '/product'})
-  .get('/', async ({ cookie : { userId }}) => {
+  .get('/', async ({ cookie : { user_id }}) => {
     return <Layout>hi</Layout>
   })
   .get('/:id', async ({params: { id }}) => {

@@ -10,15 +10,17 @@ export const authRoute = new Elysia({prefix: '/auth'})
   .get('/', ({ }) => <LoginView/>)
   .get('/sign-up', () => <RegisterView/>)
   .get('/forgot-password', () => <ForgotPassView/>)
-  .post('/sign-in', async ({ set, body: { email, password }, jwt, cookie: { auth } }) => {
+  .post('/sign-in', async ({ set, body: { email, password }, jwt, cookie: { auth, user_id } }) => {
     const user = await db.user.findUnique({ where: { email } })
     // await new Promise(res => setTimeout(res, 2000))
+    
     if (!user) {
       set.status = 401
       return <ServerMessage success={false} text="User not found"/>
     }
 
     const isMatch = await Bun.password.verify(password, user.password)
+    
     if (!isMatch) {
       set.status = 401
       return <ServerMessage  success={false} text="Wrong password"/>
@@ -27,8 +29,8 @@ export const authRoute = new Elysia({prefix: '/auth'})
     auth.set({
       value: await jwt.sign({ id: user.id })
     })
-    // @ts-expect-error
-    userId.set({ value: payload.id})
+    
+    user_id.set({ value: user.id })
     return <ServerMessage success text={'Signed!'}/>
   }, {
     body: t.Object({

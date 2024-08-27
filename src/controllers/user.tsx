@@ -4,8 +4,8 @@ import { db } from "../db";
 import { NotFound } from "../views/components";
 
 export const userRoute = new Elysia({prefix: '/user'})
-  .get('/', async ({ cookie : { userId }}) => {
-    const user = await db.user.findUnique({ where: { id: userId.value }})
+  .get('/', async ({ cookie : { user_id }}) => {
+    const user = await db.user.findUnique({ where: { id: user_id.value }})
     
     if (!user)  return <NotFound/>
 

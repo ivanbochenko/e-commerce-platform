@@ -54,9 +54,9 @@ export const Stars = ({num}: {num: number}) => {
 export const Item = ({ name, id, price, image }: {name: string, id: string, price: number, image: string}) => {
   return (
     <div class="w-full rounded-lg shadow bg-slate-800">
-        <a href={'/product/'+ id} class="flex items-center justify-center w-full h-48 overflow-hidden">
+        <a href={'/product/'+ id} class="flex items-center justify-center rounded-t-lg w-full h-48 overflow-hidden">
           { image
-            ? <img class="rounded-t-lg object-cover" src={image} alt="product image"/>
+            ? <img class="rounded-t-lg object-cover w-full" src={image} alt="product image"/>
             : <ImagePlaceholderIcon/>
           }
           

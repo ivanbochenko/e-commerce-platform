@@ -4,10 +4,10 @@ import { ChatView, MessageBubble, MessageInput } from "../views/chat";
 import { MessageIcon } from "../views/Icons";
 
 export const chatRoute = new Elysia({prefix: '/chat'})
-  .get('/', async ({ cookie: {userId}}) => {
+  .get('/', async ({ cookie: {user_id}}) => {
     const purchases = await db.trade.findMany({ 
       where: {
-        user_id: userId.value
+        user_id: user_id.value
       },
       select: {
         item: {
@@ -34,11 +34,11 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       </>
     </ChatView>
   })
-  .get('/selling', async ({ cookie: {userId}}) => {
+  .get('/selling', async ({ cookie: {user_id}}) => {
     const listings = await db.trade.findMany({
       where: {
         item: {
-          user_id: userId.value
+          user_id: user_id.value
         }
       },
       select: {
@@ -66,10 +66,10 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       </>
     </ChatView>
   })
-  .get('/buying/:item_id', async ({ cookie: { userId }, params: { item_id }}) => {
+  .get('/buying/:item_id', async ({ cookie: { user_id }, params: { item_id }}) => {
     const trades = await db.trade.findFirst({
       where: {
-        user_id: userId.value,
+        user_id: user_id.value,
         item_id
       },
       select: {
@@ -128,11 +128,11 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       </div>
     </div>
   })
-  .post('/message/:trade_id', async ({ body: { text }, cookie: { userId }, params: {trade_id} }) => {
+  .post('/message/:trade_id', async ({ body: { text }, cookie: { user_id }, params: {trade_id} }) => {
     const message = await db.message.create({
       data: {
         text,
-        author_id: userId.value!,
+        author_id: user_id.value!,
         trade_id
       }
     })
