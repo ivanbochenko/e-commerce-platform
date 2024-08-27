@@ -1,4 +1,4 @@
-import { ImagePlaceholderIcon, SearchIcon, StarIcon } from "./Icons";
+import { AngleLeftIcon, ImagePlaceholderIcon, SearchIcon, StarIcon } from "./Icons";
 
 export const ServerMessage = ({text, success}: {text: string, success: boolean}) => {
   return <div class="w-full rounded-lg">
@@ -9,15 +9,20 @@ export const ServerMessage = ({text, success}: {text: string, success: boolean})
     </div>
 };
 
-export const Spinner = ({ }) => {
-  return <img class="htmx-indicator mx-2 w-8" src="../../public/three-dots.svg"/>
-}
+export const Spinner = () => <img class="htmx-indicator mx-2 w-8" src="../../public/three-dots.svg"/>
 
 export const Button = ({message}: {message?: string}) => {
   return <button type="submit" class="w-full text-slate-300 bg-slate-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
       {message}
       <Spinner/>
     </button>
+}
+
+export const HomeButton = ({}) => {
+  return <a href="/" class='flex animate-pulse p-2 bg-slate-800 items-center justify-center rounded-full'>
+    <AngleLeftIcon/>
+    <h1 class="me-2 text-xl font-bold text-slate-300">Home</h1>
+  </a>
 }
 
 export const Stars = ({num}: {num: number}) => {

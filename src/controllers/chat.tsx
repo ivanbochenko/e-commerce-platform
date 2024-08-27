@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
-import { ChatLayout, MessageBubble, MessageInput } from "../views/chat";
+import { ChatView, MessageBubble, MessageInput } from "../views/chat";
 import { MessageIcon } from "../views/Icons";
 
 export const chatRoute = new Elysia({prefix: '/chat'})
@@ -19,7 +19,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       }
     })
 
-    return <ChatLayout buying={true}>
+    return <ChatView buying={true}>
       <>
         {purchases.map( p =>
           <button
@@ -32,7 +32,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
           </button>
         )}
       </>
-    </ChatLayout>
+    </ChatView>
   })
   .get('/selling', async ({ cookie: {userId}}) => {
     const listings = await db.trade.findMany({
@@ -51,7 +51,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       }
     })
 
-    return <ChatLayout buying={false}>
+    return <ChatView buying={false}>
       <>
         {listings.map( l =>
           <button
@@ -64,7 +64,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
           </button>
         )}
       </>
-    </ChatLayout>
+    </ChatView>
   })
   .get('/buying/:item_id', async ({ cookie: { userId }, params: { item_id }}) => {
     const trades = await db.trade.findFirst({

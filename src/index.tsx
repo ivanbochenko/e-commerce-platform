@@ -20,7 +20,7 @@ const app = new Elysia()
       return redirect('/auth/')
     }
   })
-  .get("/", async ({  }) => {
+  .get("/", async ({}) => {
     const items = await db.item.findMany()
     return (
       <Layout>

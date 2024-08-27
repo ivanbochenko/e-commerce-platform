@@ -1,16 +1,15 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
-import { Layout } from "../views/layout";
-import { Login, Forgot, Register } from "../views/login";
+import { LoginView, ForgotPassView, RegisterView } from "../views/login";
 import { ServerMessage } from "../views/components";
 import { jwtConfig } from "../jwt";
 import { sendEmail } from "../mail";
 
 export const authRoute = new Elysia({prefix: '/auth'})
   .use(jwtConfig)
-  .get('/', ({ }) => {
-    return <Layout><Login/></Layout>
-  })
+  .get('/', ({ }) => <LoginView/>)
+  .get('/sign-up', () => <RegisterView/>)
+  .get('/forgot-password', () => <ForgotPassView/>)
   .post('/sign-in', async ({ set, body: { email, password }, jwt, cookie: { auth } }) => {
     const user = await db.user.findUnique({ where: { email } })
     // await new Promise(res => setTimeout(res, 2000))
@@ -37,7 +36,6 @@ export const authRoute = new Elysia({prefix: '/auth'})
       password: t.String()
     })
   })
-  .get('/sign-up', () => <Layout><Register/></Layout>)
   .post('register', async ({ set, body: { email, name, password1, password2 }, jwt, cookie: { auth } }) => {
     const exists = await db.user.count({ where: { email } }) > 0
     if (exists) {
@@ -70,9 +68,6 @@ export const authRoute = new Elysia({prefix: '/auth'})
       password1: t.String(),
       password2: t.String()
     })
-  })
-  .get('/forgot-password', () => {
-    return <Layout><Forgot/></Layout>
   })
   .post('/restore',
     async ({ body: { email } }) => {
