@@ -44,7 +44,7 @@ export const MessageInput = ({trade_id}: {trade_id: string}) => {
 export const MessageBubble = ({name, time, text}: {name: string, time: Date, text: string}) => {
   return <div class="flex items-start ms-4 my-2 gap-2">
     <AvatarIcon w={8} h={8}/>
-    <div class="flex flex-col gap-1 w-full max-w-[320px]">
+    <div class="flex flex-col gap-1 w-full">
         <span class="text-sm font-semibold text-slate-100">{name}</span>
         <div class="flex flex-col me-auto leading-2 p-2 bg-slate-700 rounded-e-xl rounded-es-xl">
           <p class="text-sm font-normal text-slate-100">{text}</p>

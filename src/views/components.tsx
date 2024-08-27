@@ -1,13 +1,33 @@
 import { AngleLeftIcon, ImagePlaceholderIcon, SearchIcon, StarIcon } from "./Icons";
+import { Footer, Layout, Navbar } from "./layout";
 
 export const ServerMessage = ({text, success}: {text: string, success: boolean}) => {
+  const style = success ? "text-green-400" : "text-red-400"
+
   return <div class="w-full rounded-lg">
-      <div class="flex flex-col items-center pb-10">
-      <span class={success ? "text-xl m-5 text-green-400" : "text-xl m-5 text-red-400"}>{text}</span>
-      <a href="/" class="w-full text-slate-300 text-center px-5 py-2.5 bg-slate-600 font-medium rounded-lg">Home</a>
+      <div class="flex flex-col items-center p-4 space-y-4">
+        <span class={style}>{text}</span>
+        <HomeButton/>
       </div>
     </div>
 };
+
+export const NotFound = ({text}:{text?:string}) => {
+  
+  return <Layout>
+    <>
+      <Navbar/>
+      <section class="flex grow items-center justify-center mx-auto">
+        <div class="flex flex-col items-center w-full p-4 space-y-4 max-w-sm rounded-lg shadow bg-slate-800">
+          <h1 class="text-xl font-bold text-slate-100">Item not found!</h1>
+          { text ? <span class="text-xl text-slate-300">{text}</span> : null }
+          <HomeButton/>
+        </div>
+      </section>
+      <Footer/>
+    </>
+  </Layout>
+}
 
 export const Spinner = () => <img class="htmx-indicator mx-2 w-8" src="../../public/three-dots.svg"/>
 
@@ -34,9 +54,9 @@ export const Stars = ({num}: {num: number}) => {
 export const Item = ({ name, id, price, image }: {name: string, id: string, price: number, image: string}) => {
   return (
     <div class="w-full rounded-lg shadow bg-slate-800">
-        <a href={'/product/'+ id} class="flex items-center justify-center w-full h-48">
+        <a href={'/product/'+ id} class="flex items-center justify-center w-full h-48 overflow-hidden">
           { image
-            ? <img class="p-8 rounded-t-lg" src={image} alt="product image"/>
+            ? <img class="rounded-t-lg object-cover" src={image} alt="product image"/>
             : <ImagePlaceholderIcon/>
           }
           
