@@ -12,7 +12,7 @@ const css = `
 }
 `
 
-export const Layout = ({ children }: { children: JSX.Element}) => {
+export const Layout = ({ children, footer=true, nav=true }: { children: JSX.Element, footer?: boolean, nav?: boolean}) => {
   return (
     <html>
       <head>
@@ -26,10 +26,10 @@ export const Layout = ({ children }: { children: JSX.Element}) => {
         <script src="https://cdn.tailwindcss.com"/>
         <style>{css}</style>
       </head>
-      <body hx-boost="true" hx-ext="loading-states" class="min-h-screen flex flex-col bg-slate-600">
-        {/* <Navbar/> */}
+      <body hx-boost="true" hx-ext="loading-states" class="min-h-screen flex flex-col bg-slate-600 justify-between">
+        {nav ? <Navbar/> : null}
         {children}
-        {/* <Footer/> */}
+        {footer ? <Footer/> : null}
       </body>
     </html>
   );
@@ -38,9 +38,9 @@ export const Layout = ({ children }: { children: JSX.Element}) => {
 export const Navbar = () => {
   return (
     <nav class="relative flex items-center justify-between bg-slate-800 p-4">
-      <a href="/" class="text-xl font-semibold text-sky-200">Fabric</a>
+      <a href="/" class="text-xl font-semibold text-sky-300">Fabric</a>
       <div class='flex space-x-4'>
-        <a href="/chat" class="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-slate-600 rounded-lg hover:bg-slate-500 ">
+        <a href="/chat" class="relative inline-flex items-center p-2 text-sm font-medium text-center text-white bg-slate-600 rounded-lg hover:bg-slate-500 ">
           <MessageIcon/>
           <div class="absolute inline-flex items-center justify-center w-6 h-6 z-10 text-xs font-bold text-slate-100 bg-sky-600 border-2 border-slate-100 rounded-full -top-2 -end-2">
             {10}

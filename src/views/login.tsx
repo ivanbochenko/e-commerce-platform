@@ -2,7 +2,7 @@ import { Button } from "./components";
 import { Layout } from "./layout";
 
 export const LoginView = ({ }) => {
-  return <Layout>
+  return <Layout footer={false} nav={false}>
     <section class="flex flex-col items-center justify-center md:h-screen">
       <div class="w-full rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 bg-slate-800">
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -33,7 +33,7 @@ export const LoginView = ({ }) => {
 };
 
 export const ForgotPassView = ({ }) => {
-  return <Layout>
+  return <Layout footer={false} nav={false}>
     <section class="flex flex-col items-center justify-center md:h-screen">
       <div class="w-full rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 bg-slate-800">
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -55,7 +55,7 @@ export const ForgotPassView = ({ }) => {
 
 
 export const RegisterView = ({ }) => {
-  return <Layout>
+  return <Layout footer={false} nav={false}>
     <section class="flex flex-col items-center justify-center md:h-screen">
       <div class="w-full rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 bg-slate-800">
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">

@@ -5,7 +5,7 @@ import { Layout } from "./layout"
 export const ChatView = ({children, buying}: {children: JSX.Element, buying: boolean}) => {
   const activeStyle = 'flex w-1/2 p-2 text-slate-300 cursor-default'
   const passiveStyle = 'flex w-1/2 p-2 text-slate-300 bg-slate-600 hover:bg-slate-500 rounded-lg'
-  return <Layout>
+  return <Layout footer={false} nav={false}>
     <div class='flex flex-row h-dvh'>
       <div class="h-full p-4 space-y-2 divide-y-2 divide-slate-600 bg-slate-800 font-medium">
         <div class='flex'>

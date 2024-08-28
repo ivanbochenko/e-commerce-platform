@@ -1,7 +1,7 @@
 import { Elysia } from "elysia";
 import { html } from '@elysiajs/html'
 import { staticPlugin } from '@elysiajs/static'
-import { Layout, Footer, Navbar } from './views/layout'
+import { Layout } from './views/layout'
 import { userRoute } from "./controllers/user";
 import { db } from "./db";
 import { jwtConfig } from "./jwt";
@@ -20,19 +20,17 @@ const app = new Elysia()
       return redirect('/auth/')
     }
   })
-  .get("/", async ({}) => {
+  .get("/", async () => {
     const items = await db.item.findMany()
     return (
       <Layout>
         <>
-          <Navbar/>
           <Search/>
           <main class='grid grid-cols-3 w-5/6 mx-auto gap-8'>
             {items.map( item =>
               <Item {...item}/>
             )}
           </main>
-          <Footer/>
         </>
       </Layout>
     )

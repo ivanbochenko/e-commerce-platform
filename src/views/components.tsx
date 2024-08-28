@@ -1,5 +1,5 @@
 import { AngleLeftIcon, ImagePlaceholderIcon, SearchIcon, StarIcon } from "./Icons";
-import { Footer, Layout, Navbar } from "./layout";
+import { Layout } from "./layout";
 
 export const ServerMessage = ({text, success}: {text: string, success: boolean}) => {
   const style = success ? "text-green-400" : "text-red-400"
@@ -15,17 +15,13 @@ export const ServerMessage = ({text, success}: {text: string, success: boolean})
 export const NotFound = ({text}:{text?:string}) => {
   
   return <Layout>
-    <>
-      <Navbar/>
-      <section class="flex grow items-center justify-center mx-auto">
-        <div class="flex flex-col items-center w-full p-4 space-y-4 max-w-sm rounded-lg shadow bg-slate-800">
-          <h1 class="text-xl font-bold text-slate-100">Item not found!</h1>
-          { text ? <span class="text-xl text-slate-300">{text}</span> : null }
-          <HomeButton/>
-        </div>
-      </section>
-      <Footer/>
-    </>
+    <section class="flex grow items-center justify-center mx-auto">
+      <div class="flex flex-col items-center w-full p-4 space-y-4 max-w-sm rounded-lg shadow bg-slate-800">
+        <h1 class="text-xl font-bold text-slate-100">Item not found!</h1>
+        { text ? <span class="text-xl text-slate-300">{text}</span> : null }
+        <HomeButton/>
+      </div>
+    </section>
   </Layout>
 }
 
@@ -51,7 +47,7 @@ export const Stars = ({num}: {num: number}) => {
   </div>
 }
 
-export const Item = ({ name, id, price, image }: {name: string, id: string, price: number, image: string}) => {
+export const Item = ({ name, id, price, stars, image }: {name: string, id: string, price: number, stars: number, image: string}) => {
   return (
     <div class="w-full rounded-lg shadow bg-slate-800">
         <a href={'/product/'+ id} class="flex items-center justify-center rounded-t-lg w-full h-48 overflow-hidden">
@@ -64,7 +60,7 @@ export const Item = ({ name, id, price, image }: {name: string, id: string, pric
         <div class="px-5 pb-5">
             <h5 class="text-xl font-semibold tracking-tight text-slate-100">{name}</h5>
             <div class="flex items-center mt-2.5 mb-5">
-              <Stars num={4}/>
+              <Stars num={stars}/>
             </div>
             <div class="flex items-center justify-between">
                 <span class="text-3xl font-bold text-slate-100">{price}$</span>

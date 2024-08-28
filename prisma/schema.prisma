@@ -29,6 +29,7 @@ model Item {
   price       Int
   image       String
   description String?
+  stars       Int        @default(0)
   trades      Trade[]    @relation("product")
 }
 
