@@ -55,16 +55,15 @@ export const Item = ({ name, id, price, stars, image }: {name: string, id: strin
             ? <img class="rounded-t-lg object-cover w-full" src={image} alt="product image"/>
             : <ImagePlaceholderIcon/>
           }
-          
         </a>
-        <div class="px-5 pb-5">
+        <div class="p-4 space-y-2">
             <h5 class="text-xl font-semibold tracking-tight text-slate-100">{name}</h5>
-            <div class="flex items-center mt-2.5 mb-5">
+            <div class="flex items-center">
               <Stars num={stars}/>
             </div>
             <div class="flex items-center justify-between">
-                <span class="text-3xl font-bold text-slate-100">{price}$</span>
-                <button class="text-slate-100 bg-slate-600 hover:bg-slate-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-300">Buy</button>
+                <span class="text-3xl font-bold text-slate-300">{price}$</span>
+                <button class="text-slate-300 bg-slate-600 hover:bg-slate-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-300">Buy</button>
             </div>
         </div>
     </div>
@@ -75,10 +74,10 @@ export const Search = ({}) => {
   return(
     <form class="w-1/2 mx-auto">
       <div class="relative m-4">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
+        <div class="absolute inset-y-0 start-0 flex items-center ms-2 pointer-events-none">
           <SearchIcon/>
         </div>
-        <input type="search" id="default-search" class="block w-full p-4 ps-12 text-slate-100 font-normal transition duration-300 ease-in-out rounded-lg bg-slate-700 focus:outline-none" placeholder="Search" required />
+        <input type="search" id="default-search" class="block w-full p-2 ps-10 text-slate-100 font-normal transition duration-300 ease-in-out rounded-lg bg-slate-700 focus:outline-none" placeholder="Search" required />
       </div>
     </form>
   )

@@ -1,26 +1,24 @@
 import { HomeButton } from "./components"
-import { AvatarIcon, BagIcon, SendIcon, ShopIcon } from "./Icons"
+import { AvatarIcon, EnvelopeIcon, SendIcon, UserIcon } from "./Icons"
 import { Layout } from "./layout"
 
-export const ChatView = ({children, buying}: {children: JSX.Element, buying: boolean}) => {
-  const activeStyle = 'flex w-1/2 p-2 text-slate-300 cursor-default'
-  const passiveStyle = 'flex w-1/2 p-2 text-slate-300 bg-slate-600 hover:bg-slate-500 rounded-lg'
-  return <Layout footer={false} nav={false}>
-    <div class='flex flex-row h-dvh'>
-      <div class="h-full p-4 space-y-2 divide-y-2 divide-slate-600 bg-slate-800 font-medium">
-        <div class='flex'>
-          <a href="/chat" class={buying ? activeStyle : passiveStyle}>
-            <BagIcon/>
-            <span class="flex ms-2">Buying</span>
-          </a>
-          <a href="/chat/selling" class={!buying ? activeStyle : passiveStyle}>
-            <ShopIcon/>
-            <span class="flex ms-2">Selling</span>
-          </a>
-        </div>
-        {children}
+export const ChatView = ({chatList}: {chatList: {id: string, item: {name: string}}[], selling?: boolean}) => {
+  return <Layout fix_h>
+    <div class='flex flex-row grow mt-4 h-3/4 md:w-2/3 md:mx-auto bg-slate-800 rounded-xl p-4'>
+      <div class="flex flex-col h-full space-y-2 me-2 divide-y-2 divide-slate-600 font-medium">
+        {chatList.map(i =>
+          <button
+            hx-get={"/chat/" + i.id}
+            hx-target='#chatPlaceholder'
+            hx-swap='innerHTML'
+            class="flex w-full items-center p-2 space-x-2 text-slate-100"
+          >
+            <EnvelopeIcon/>
+            <p>{i.item.name}</p>
+          </button>
+        )}
       </div>
-      <div id='chatPlaceholder' class='flex flex-col w-full items-center justify-around'>
+      <div id='chatPlaceholder' class='flex flex-col grow bg-slate-600 rounded-xl items-center justify-around'>
         <h1 class="text-xl font-bold text-slate-300">Select chat</h1>
         <HomeButton/>
       </div>
@@ -29,23 +27,25 @@ export const ChatView = ({children, buying}: {children: JSX.Element, buying: boo
 }
 
 export const MessageInput = ({trade_id}: {trade_id: string}) => {
-  return <form
-    hx-post={'/chat/message/'+ trade_id}
-    // hx-swap='none'
-    class='relative mr-auto w-full sm:w-96'
-  >
-    <input id='text' name="text" placeholder="message..." class="p-4 pe-12 w-full text-slate-100 bg-slate-700 rounded-xl outline-none"/>
-    <button type="submit" class="absolute inset-y-0 end-4 flex mt-4">
-      <SendIcon/>
-    </button>
-  </form>
+  return <div class='px-4 pb-4'>
+    <form
+      hx-post={'/chat/message/'+ trade_id}
+      hx-swap="outerHTML"
+      class='relative w-full'
+    >
+      <input id='text' name="text" placeholder="message..." class="p-4 pe-12 w-full text-slate-100 bg-slate-700 rounded-xl outline-none"/>
+      <button type="submit" class="flex absolute inset-y-0 end-4 mt-4">
+        <SendIcon/>
+      </button>
+    </form>
+  </div>
 }
 
-export const MessageBubble = ({name, time, text}: {name: string, time: Date, text: string}) => {
+export const MessageBubble = ({author, time, text}: {author: {name:string}, time: Date, text: string}) => {
   return <div class="flex items-start ms-4 my-2 gap-2">
-    <AvatarIcon w={8} h={8}/>
+    <UserIcon size={8}/>
     <div class="flex flex-col gap-1 w-full">
-        <span class="text-sm font-semibold text-slate-100">{name}</span>
+        <span class="text-sm font-semibold text-slate-100">{author.name}</span>
         <div class="flex flex-col me-auto leading-2 p-2 bg-slate-700 rounded-e-xl rounded-es-xl">
           <p class="text-sm font-normal text-slate-100">{text}</p>
           <span class="text-sm font-normal text-slate-400">

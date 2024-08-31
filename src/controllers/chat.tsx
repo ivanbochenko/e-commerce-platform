@@ -1,80 +1,36 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
 import { ChatView, MessageBubble, MessageInput } from "../views/chat";
-import { MessageIcon } from "../views/Icons";
 
 export const chatRoute = new Elysia({prefix: '/chat'})
   .get('/', async ({ cookie: {user_id}}) => {
-    const purchases = await db.trade.findMany({ 
+    const chats = await db.trade.findMany({ 
       where: {
-        user_id: user_id.value
+        OR: [
+          { user_id: user_id.value },
+          { item: { user_id: user_id.value } }
+        ]
       },
       select: {
+        id: true,
         item: {
           select: {
-            id: true,
             name: true
           }
         }
       }
     })
 
-    return <ChatView buying={true}>
-      <>
-        {purchases.map( p =>
-          <button
-            hx-get={"/chat/buying/" + p.item.id}
-            hx-target='#chatPlaceholder'
-            class="flex w-full items-center p-2 text-slate-100"
-          >
-            <MessageIcon/>
-            <span class="ms-2">{p.item.name}</span>
-          </button>
-        )}
-      </>
-    </ChatView>
+    return <ChatView chatList={chats}/>
   })
-  .get('/selling', async ({ cookie: {user_id}}) => {
-    const listings = await db.trade.findMany({
+  .get('/:trade_id', async ({ params: { trade_id }}) => {
+    const trade = await db.trade.findUnique({
       where: {
-        item: {
-          user_id: user_id.value
-        }
-      },
-      select: {
-        item: {
-          select: {
-            name: true,
-            id: true
-          }
-        }
-      }
-    })
-
-    return <ChatView buying={false}>
-      <>
-        {listings.map( l =>
-          <button
-            hx-get={"/chat/selling/" + l.item.id}
-            hx-target='#chatPlaceholder'
-            class="flex w-full items-center p-2 text-slate-100"
-          >
-            <MessageIcon/>
-            <span class="ms-2">{l.item.name}</span>
-          </button>
-        )}
-      </>
-    </ChatView>
-  })
-  .get('/buying/:item_id', async ({ cookie: { user_id }, params: { item_id }}) => {
-    const trades = await db.trade.findFirst({
-      where: {
-        user_id: user_id.value,
-        item_id
+        id: trade_id
       },
       select: {
         id: true,
-        item: { select: {user: { select: {name: true}}} },
+        item: true,
         messages: {
           include: {
             author: true
@@ -84,55 +40,32 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       }
     })
 
-    if (!trades) return <h1>No messages!</h1>
+    if (!trade) return <h1>No messages!</h1>
 
-    const messages = trades.messages.map( m => 
-      <MessageBubble name={m.author.name} {...m}/>
+    return (
+      <div class="flex flex-col grow w-full h-full justify-between">
+        <div class='flex justify-center'>
+          <h1 class="absolute text-xl font-bold text-slate-300">{ trade.item.name }</h1>
+        </div>
+        <div
+          hx-get={'/chat/new/' + trade_id}
+          // hx-trigger="every 5s"
+          class='flex flex-col-reverse flex-auto h-full overflow-auto'
+        >
+          {trade.messages.map( m => <MessageBubble {...m}/>)}
+        </div>
+        <MessageInput trade_id={trade.id}/>
+      </div>
     )
-    return <div class="flex flex-col h-full w-full justify-end">
-      <div class='flex flex-col-reverse overflow-auto'>
-        {messages}
-      </div>
-      <div class='ms-4 mb-4'>
-        <MessageInput trade_id={trades.id} />
-      </div>
-    </div>
   })
-  .get('/selling/:item_id', async ({ params: { item_id }}) => {
-    const trades = await db.trade.findFirst({
-      where: {
-        item_id
-      },
-      select: {
-        id: true,
-        messages: {
-          include: {
-            author: true
-          },
-          orderBy: { time: 'desc' }
-        },
-      },
-    })
-
-    if (!trades) return <h1>No messages!</h1>
-
-    const messages = trades.messages.map( m => 
-      <MessageBubble name={m.author.name} {...m}/>
-    )
-    return <div class="flex flex-col h-full w-full justify-end">
-      <div class='flex flex-col-reverse overflow-auto'>
-        {messages}
-      </div>
-      <div class='ms-4 mb-4'>
-        <MessageInput trade_id={trades.id} />
-      </div>
-    </div>
-  })
-  .post('/message/:trade_id', async ({ body: { text }, cookie: { user_id }, params: {trade_id} }) => {
+  .post('/message/:trade_id', async ({ body: { text }, cookie: { user_id }, params: {trade_id}, redirect }) => {
+    if (!user_id.value) {
+      return redirect('/auth')
+    }
     const message = await db.message.create({
       data: {
         text,
-        author_id: user_id.value!,
+        author_id: user_id.value,
         trade_id
       }
     })
@@ -143,5 +76,34 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     })
   }
 )
+.ws('/:trade_id', {
+  params: t.Object({
+    trade_id: t.String()
+  }),
+  body: t.Object({
+    text: t.String(),
+    author_id: t.String(),
+  }),
+  open(ws) {
+    ws.subscribe(ws.data.params.trade_id)
+  },
+  async message(ws, message) {
+    const newMessage = await db.message.create({
+      data: { ...message, trade_id: ws.data.params.trade_id },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+          }
+        }
+      }
+    })
+    ws.publish(ws.data.params.trade_id, newMessage)
+  },
+  close(ws) {
+    ws.unsubscribe(ws.data.params.trade_id)
+  },
+})
 
   

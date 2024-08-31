@@ -1,4 +1,4 @@
-import { AvatarIcon, MessageIcon } from "./Icons"
+import { AvatarIcon, EnvelopeSolidIcon, UserIcon } from "./Icons"
 
 const css = `
 .htmx-indicator{
@@ -12,21 +12,19 @@ const css = `
 }
 `
 
-export const Layout = ({ children, footer=true, nav=true }: { children: JSX.Element, footer?: boolean, nav?: boolean}) => {
+export const Layout = ({ children, footer=true, nav=true, fix_h=false }: { children: JSX.Element, footer?: boolean, nav?: boolean, fix_h?: boolean}) => {
   return (
     <html>
       <head>
         <title>Fabric</title>
         <link rel="shortcut icon" type="image/x-icon" href="/public/favicon.ico"></link>
-        <script
-          src="https://unpkg.com/htmx.org@1.9.10"
-          integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
-          crossorigin="anonymous"/>
+        <script src="https://unpkg.com/htmx.org@2.0.2"/>
         <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"/>
+        <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"/>
         <script src="https://cdn.tailwindcss.com"/>
         <style>{css}</style>
       </head>
-      <body hx-boost="true" hx-ext="loading-states" class="min-h-screen flex flex-col bg-slate-600 justify-between">
+      <body hx-boost="true" hx-ext="loading-states" class={ "flex flex-col bg-slate-600 justify-between " + (fix_h ? 'h-screen' : 'min-h-screen') }>
         {nav ? <Navbar/> : null}
         {children}
         {footer ? <Footer/> : null}
@@ -40,15 +38,17 @@ export const Navbar = () => {
     <nav class="relative flex items-center justify-between bg-slate-800 p-4">
       <a href="/" class="text-xl font-semibold text-sky-300">Fabric</a>
       <div class='flex space-x-4'>
-        <a href="/chat" class="relative inline-flex items-center p-2 text-sm font-medium text-center text-white bg-slate-600 rounded-lg hover:bg-slate-500 ">
-          <MessageIcon/>
-          <div class="absolute inline-flex items-center justify-center w-6 h-6 z-10 text-xs font-bold text-slate-100 bg-sky-600 border-2 border-slate-100 rounded-full -top-2 -end-2">
+        <a href="/chat" hx-boost='false' class="relative inline-flex items-center p-2 text-sm font-medium text-center text-white bg-slate-600 rounded-lg hover:bg-slate-500 ">
+          <EnvelopeSolidIcon/>
+          <div class="absolute inline-flex items-center justify-center size-6 z-10 text-xs font-bold text-slate-100 bg-sky-600 border-2 border-slate-100 rounded-full -top-2 -end-2">
             {10}
           </div>
-          <div class="absolute w-6 h-6 bg-sky-600 rounded-full animate-ping -top-2 -end-2"/>
+          <div class="absolute size-6 bg-sky-600 rounded-full animate-ping -top-2 -end-2"/>
         </a>
         <a href="/user" class="relative w-10 h-10 overflow-hidden bg-slate-600 hover:bg-slate-500 rounded-full">
-          <AvatarIcon w={10} h={10}/>
+          <div class='absolute top-1'>
+            <AvatarIcon size={10}/>
+          </div>
         </a>
       </div>
     </nav>
