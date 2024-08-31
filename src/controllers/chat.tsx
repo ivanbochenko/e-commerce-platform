@@ -44,8 +44,8 @@ export const chatRoute = new Elysia({prefix: '/chat'})
 
     return (
       <div class="flex flex-col grow w-full h-full justify-between">
-        <div class='flex justify-center'>
-          <h1 class="absolute text-xl font-bold text-slate-300">{ trade.item.name }</h1>
+        <div class='flex justify-center relative'>
+          <h1 class="absolute top-2 text-xl font-bold text-slate-300">{ trade.item.name }</h1>
         </div>
         <div
           hx-get={'/chat/new/' + trade_id}

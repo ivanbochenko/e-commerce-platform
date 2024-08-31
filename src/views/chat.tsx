@@ -1,5 +1,5 @@
 import { HomeButton } from "./components"
-import { AvatarIcon, EnvelopeIcon, SendIcon, UserIcon } from "./Icons"
+import { EnvelopeIcon, SendIcon, UserIcon } from "./Icons"
 import { Layout } from "./layout"
 
 export const ChatView = ({chatList}: {chatList: {id: string, item: {name: string}}[], selling?: boolean}) => {

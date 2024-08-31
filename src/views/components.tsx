@@ -49,24 +49,24 @@ export const Stars = ({num}: {num: number}) => {
 
 export const Item = ({ name, id, price, stars, image }: {name: string, id: string, price: number, stars: number, image: string}) => {
   return (
-    <div class="w-full rounded-lg shadow bg-slate-800">
-        <a href={'/product/'+ id} class="flex items-center justify-center rounded-t-lg w-full h-48 overflow-hidden">
+    <a  href={'/product/'+ id} class="w-full rounded-lg shadow bg-slate-800 transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-300">
+        <div class="flex items-center justify-center rounded-t-lg w-full h-48 overflow-hidden">
           { image
             ? <img class="rounded-t-lg object-cover w-full" src={image} alt="product image"/>
             : <ImagePlaceholderIcon/>
           }
-        </a>
+        </div>
         <div class="p-4 space-y-2">
-            <h5 class="text-xl font-semibold tracking-tight text-slate-100">{name}</h5>
+            <h5 class="text-2xl font-semibold tracking-tight text-slate-100">{name}</h5>
             <div class="flex items-center">
               <Stars num={stars}/>
             </div>
             <div class="flex items-center justify-between">
-                <span class="text-3xl font-bold text-slate-300">{price}$</span>
-                <button class="text-slate-300 bg-slate-600 hover:bg-slate-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-300">Buy</button>
+                <span class="text-xl font-bold text-slate-300">{price}$</span>
+                <button class="text-slate-300 bg-slate-600 hover:bg-slate-500 font-medium rounded-lg text-md px-4 py-2 text-center">Buy</button>
             </div>
         </div>
-    </div>
+    </a>
   )
 };
 

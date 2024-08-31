@@ -16,7 +16,7 @@ export const Layout = ({ children, footer=true, nav=true, fix_h=false }: { child
   return (
     <html>
       <head>
-        <title>Fabric</title>
+        <title>{process.env.PROJECT_NAME}</title>
         <link rel="shortcut icon" type="image/x-icon" href="/public/favicon.ico"></link>
         <script src="https://unpkg.com/htmx.org@2.0.2"/>
         <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"/>
@@ -36,7 +36,7 @@ export const Layout = ({ children, footer=true, nav=true, fix_h=false }: { child
 export const Navbar = () => {
   return (
     <nav class="relative flex items-center justify-between bg-slate-800 p-4">
-      <a href="/" class="text-xl font-semibold text-sky-300">Fabric</a>
+      <a href="/" class="text-xl font-semibold text-sky-300">{process.env.PROJECT_NAME}</a>
       <div class='flex space-x-4'>
         <a href="/chat" hx-boost='false' class="relative inline-flex items-center p-2 text-sm font-medium text-center text-white bg-slate-600 rounded-lg hover:bg-slate-500 ">
           <EnvelopeSolidIcon/>
@@ -59,7 +59,7 @@ export const Footer = () => (
   <footer>
     <div class="bg-slate-800 rounded-lg shadow m-4 w-1/2 mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
       <span class="text-slate-400 sm:text-center">
-        © 2024 <a href="/" class="hover:underline">Fabric™</a>
+        © 2024 <a href="/" class="hover:underline">{process.env.PROJECT_NAME}™</a>
       </span>
       <ul class="flex flex-wrap items-center text-sm font-medium text-slate-400 sm:mt-0">
         <li>

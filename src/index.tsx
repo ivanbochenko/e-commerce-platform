@@ -47,6 +47,6 @@ const app = new Elysia()
   .listen(3000);
 
 console.log(
-  `🧶 Fabric is running at ${app.server?.hostname}:${app.server?.port}`
+  `${process.env.PROJECT_NAME} is running at ${app.server?.hostname}:${app.server?.port}`
 );
 
