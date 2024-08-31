@@ -7,8 +7,9 @@ import { db } from "./db";
 import { jwtConfig } from "./jwt";
 import { authRoute } from "./controllers/auth";
 import { chatRoute } from "./controllers/chat";
-import { Item, Search } from "./views/components";
+import { Inbox, Item, Search } from "./views/components";
 import { productRoute } from "./controllers/product";
+import { items } from "../items";
 
 const app = new Elysia()
   .use(html())
@@ -20,13 +21,28 @@ const app = new Elysia()
       return redirect('/auth/')
     }
   })
+  .get('/inbox', async ({ cookie: { user_id }, redirect}) => {
+
+    if (!user_id.value) {
+      return redirect('/auth/')
+    }
+    const unread = await db.read.count({
+      where: {
+        user_id: user_id.value,
+        value: false
+      }
+    })
+
+    return <Inbox count={unread}/>
+  })
   .get("/", async () => {
+
     const items = await db.item.findMany()
     return (
       <Layout>
         <>
           <Search/>
-          <main class='grid grid-cols-3 w-5/6 mx-auto gap-8'>
+          <main class='grid grid-cols-3 gap-8 md:w-5/6 md:mx-auto'>
             {items.map( item =>
               <Item {...item}/>
             )}
@@ -49,4 +65,21 @@ const app = new Elysia()
 console.log(
   `${process.env.PROJECT_NAME} is running at ${app.server?.hostname}:${app.server?.port}`
 );
+
+// console.log(
+//   await db.user.create({
+//     data: {
+//       id: '1',
+//       name: 'ivan',
+//       email: 'ivan@gmail.com',
+//       password: await Bun.password.hash('123')
+//     }
+//   })
+// );
+
+// console.log(
+//   await db.item.createMany({
+//     data: items
+//   })
+// );
 

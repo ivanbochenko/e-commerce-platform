@@ -67,6 +67,22 @@ export const chatRoute = new Elysia({prefix: '/chat'})
         text,
         author_id: user_id.value,
         trade_id
+      },
+      select: {
+        id: true,
+        trade: {
+          select: {
+            item: {
+              select: { user_id: true }
+            }
+          }
+        }
+      }
+    })
+    const read = await db.read.create({
+      data: {
+        user_id: message.trade.item.user_id,
+        message_id: message.id
       }
     })
     return <MessageInput trade_id={trade_id}/>

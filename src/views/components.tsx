@@ -1,4 +1,4 @@
-import { AngleLeftIcon, ImagePlaceholderIcon, SearchIcon, StarIcon } from "./Icons";
+import { AngleLeftIcon, EnvelopeSolidIcon, ImagePlaceholderIcon, SearchIcon, StarIcon } from "./Icons";
 import { Layout } from "./layout";
 
 export const ServerMessage = ({text, success}: {text: string, success: boolean}) => {
@@ -81,4 +81,14 @@ export const Search = ({}) => {
       </div>
     </form>
   )
+}
+
+export const Inbox = ({count}: {count: number}) => {
+  return <a href="/chat" hx-boost='false' class="relative inline-flex items-center p-2 text-sm font-medium text-center text-white bg-slate-600 rounded-lg hover:bg-slate-500 ">
+    <EnvelopeSolidIcon/>
+    <div class="absolute inline-flex items-center justify-center size-6 z-10 text-xs font-bold text-slate-100 bg-sky-600 border-2 border-slate-100 rounded-full -top-2 -end-2">
+      {count}
+    </div>
+    <div class="absolute size-6 bg-sky-600 rounded-full animate-ping -top-2 -end-2"/>
+  </a>
 }

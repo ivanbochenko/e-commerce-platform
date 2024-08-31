@@ -1,3 +1,4 @@
+import { Inbox } from "./components";
 import { AvatarIcon, EnvelopeSolidIcon, UserIcon } from "./Icons"
 
 const css = `
@@ -38,13 +39,9 @@ export const Navbar = () => {
     <nav class="relative flex items-center justify-between bg-slate-800 p-4">
       <a href="/" class="text-xl font-semibold text-sky-300">{process.env.PROJECT_NAME}</a>
       <div class='flex space-x-4'>
-        <a href="/chat" hx-boost='false' class="relative inline-flex items-center p-2 text-sm font-medium text-center text-white bg-slate-600 rounded-lg hover:bg-slate-500 ">
-          <EnvelopeSolidIcon/>
-          <div class="absolute inline-flex items-center justify-center size-6 z-10 text-xs font-bold text-slate-100 bg-sky-600 border-2 border-slate-100 rounded-full -top-2 -end-2">
-            {10}
-          </div>
-          <div class="absolute size-6 bg-sky-600 rounded-full animate-ping -top-2 -end-2"/>
-        </a>
+        <div hx-get='/inbox' hx-trigger='load once'>
+          <Inbox count={0}/>
+        </div>
         <a href="/user" class="relative w-10 h-10 overflow-hidden bg-slate-600 hover:bg-slate-500 rounded-full">
           <div class='absolute top-1'>
             <AvatarIcon size={10}/>
