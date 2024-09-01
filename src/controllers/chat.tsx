@@ -112,25 +112,52 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     })
   }
 )
-.post('/new/:item_id', async ({ params: { item_id }, cookie: { user_id }, redirect }) => {
+.post('/new/:item_id', async ({ body: { text }, params: { item_id }, cookie: { user_id }, redirect }) => {
   if (!user_id.value) {
     return redirect('/auth')
   }
-  const chat = await db.chat.count({
+  const count = await db.chat.count({
     where: {
       item_id,
       user_id: user_id.value
     }
   })
-  if (chat == 0) {
-    const chat = await db.chat.create({
-      data: {
-        item_id,
-        user_id: user_id.value
+  if (count !== 0) return 
+  const chat = await db.chat.create({
+    data: {
+      item_id,
+      user_id: user_id.value
+    }
+  })
+  const message = await db.message.create({
+    data: {
+      text,
+      author_id: user_id.value,
+      chat_id: chat.id
+    },
+    select: {
+      id: true,
+      chat: {
+        select: {
+          item: {
+            select: { user_id: true }
+          }
+        }
       }
-    })
-  }
+    }
+  })
+
+  const read = await db.read.create({
+    data: {
+      message_id: message.id,
+      user_id: message.chat.item.user_id,
+    }
+  })
   return 'Chat created'
+},{
+  body: t.Object({
+    text: t.String()
+  })
 })
 .ws('/:chat_id', {
   params: t.Object({
