@@ -8,7 +8,7 @@ import { jwtConfig } from "./jwt";
 import { authRoute } from "./controllers/auth";
 import { chatRoute } from "./controllers/chat";
 import { Inbox, Item, Search } from "./views/components";
-import { productRoute } from "./controllers/product";
+import { itemRoute } from "./controllers/item";
 import { items } from "../items";
 
 const app = new Elysia()
@@ -55,7 +55,7 @@ const app = new Elysia()
   .use(userRoute)
   .use(authRoute)
   .use(chatRoute)
-  .use(productRoute)
+  .use(itemRoute)
   .onRequest(({ request }) => {
       console.log(`Request received: ${request.method}: ${request.url}`);
     }

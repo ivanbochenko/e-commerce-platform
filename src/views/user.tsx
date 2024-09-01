@@ -14,7 +14,7 @@ export const UserView = ({ id, name, email }: {id: string, name: string, email: 
           <h5 class="text-xl font-medium text-slate-100">{name}</h5>
           <p class="text-sm text-slate-400">{email}</p>
           <div>
-            <a href={"/product/user/" + id} class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-slate-100 bg-slate-600 rounded-lg hover:bg-slate-500">Products</a>
+            <a href={"/item/user/" + id} class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-slate-100 bg-slate-600 rounded-lg hover:bg-slate-500">Products</a>
             <a href="#" class="py-2 px-4 ml-4 text-sm font-medium text-slate-100 rounded-lg border border-slate-500 hover:bg-slate-500">Message</a>
           </div>
         </div>

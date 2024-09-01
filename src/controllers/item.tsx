@@ -1,12 +1,11 @@
 import Elysia from "elysia"
 import { db } from "../db";
 import { Layout } from "../views/layout";
-import { Product } from "../views/product";
+import { ItemView } from "../views/item";
 import { Dislike, Item, Like, NotFound } from "../views/components";
 import { NewItem } from "../views/new_item";
-import { HeartEmptyIcon, HeartFullIcon } from "../views/Icons";
 
-export const productRoute = new Elysia({prefix: '/product'})
+export const itemRoute = new Elysia({prefix: '/item'})
   .get('/', async ({ cookie : { user_id }}) => {
     return <Layout>hi</Layout>
   })
@@ -23,7 +22,7 @@ export const productRoute = new Elysia({prefix: '/product'})
     if (!item) return <NotFound/>
     
     return <Layout>
-      <Product {...item}/>
+      <ItemView {...item}/>
     </Layout>
   })
   .get('/new', async () => {

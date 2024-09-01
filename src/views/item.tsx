@@ -1,7 +1,7 @@
 import { Dislike, Input, Like, Stars } from "./components";
-import { HeartEmptyIcon, HeartFullIcon, SendIcon, XCircle } from "./Icons";
+import { SendIcon, XCircle } from "./Icons";
 
-export const Product = ({
+export const ItemView = ({
   id, 
   name, 
   image, 

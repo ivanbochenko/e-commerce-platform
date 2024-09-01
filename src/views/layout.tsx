@@ -39,14 +39,14 @@ export const Navbar = () => {
     <nav class="relative flex items-center justify-between bg-slate-800 p-4">
       <a href="/" class="text-xl font-semibold text-sky-300">{process.env.PROJECT_NAME}</a>
       <div class='flex space-x-4'>
-        <a href="/product/new" class='flex flex-row items-center p-2 space-x-2 cursor-pointer bg-slate-600 hover:bg-slate-500 rounded-lg text-slate-300'>
+        <a href="/item/new" class='flex flex-row items-center p-2 space-x-2 cursor-pointer bg-slate-600 hover:bg-slate-500 rounded-lg text-slate-300'>
           <PlusIcon/>
           <h1>Add product</h1>
         </a>
         <div hx-get='/inbox' hx-trigger='load once'>
           <Inbox count={0}/>
         </div>
-        <a href="/product/likes" class="flex items-center justify-center text-slate-300 size-10 bg-slate-600 hover:bg-slate-500 rounded-full">
+        <a href="/item/likes" class="flex items-center justify-center text-slate-300 size-10 bg-slate-600 hover:bg-slate-500 rounded-full">
           <HeartFullIcon/>
         </a>
         <a href="/user" class="relative size-10 overflow-hidden bg-slate-600 hover:bg-slate-500 rounded-full">

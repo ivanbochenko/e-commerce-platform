@@ -56,7 +56,7 @@ export const Stars = ({num}: {num: number}) => {
 
 export const Item = ({ name, id, price, stars, image }: {name: string, id: string, price: number, stars: number, image: string}) => {
   return (
-    <a  href={'/product/'+ id} class="w-full rounded-lg shadow bg-slate-800 transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-300">
+    <a  href={'/item/'+ id} class="w-full rounded-lg shadow bg-slate-800 transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-300">
         <div class="flex items-center justify-center rounded-t-lg w-full h-48 overflow-hidden">
           { image
             ? <img class="rounded-t-lg object-cover w-full" src={image} alt="product image"/>
@@ -101,7 +101,7 @@ export const Inbox = ({count}: {count: number}) => {
 }
 
 export const Like = ({item_id}: {item_id: string}) => {
-  return<button hx-post={'/product/like/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
+  return<button hx-post={'/item/like/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
     <div class='m-4'>
       <HeartEmptyIcon/>
     </div>
@@ -109,7 +109,7 @@ export const Like = ({item_id}: {item_id: string}) => {
 }
 
 export const Dislike = ({id, item_id}: {id:string, item_id: string}) => {
-  return <button hx-post={'/product/dislike/' + id + '/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
+  return <button hx-post={'/item/dislike/' + id + '/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
   
     <div class='m-4'>
       <HeartFullIcon/>
