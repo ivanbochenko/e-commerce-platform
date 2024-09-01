@@ -116,19 +116,23 @@ export const chatRoute = new Elysia({prefix: '/chat'})
   if (!user_id.value) {
     return redirect('/auth')
   }
-  const count = await db.chat.count({
+  var chat
+  const chatFromDB = await db.chat.findFirst({
     where: {
       item_id,
       user_id: user_id.value
     }
   })
-  if (count !== 0) return 
-  const chat = await db.chat.create({
-    data: {
-      item_id,
-      user_id: user_id.value
-    }
-  })
+  if (chatFromDB) {
+    chat = chatFromDB
+  } else {
+    chat = await db.chat.create({
+      data: {
+        item_id,
+        user_id: user_id.value
+      }
+    })
+  }
   const message = await db.message.create({
     data: {
       text,
@@ -153,7 +157,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       user_id: message.chat.item.user_id,
     }
   })
-  return 'Chat created'
+  return <div class='flex justify-center items-center'>{chatFromDB ? 'Sent' : 'Chat created'}</div>
 },{
   body: t.Object({
     text: t.String()

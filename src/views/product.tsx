@@ -1,7 +1,23 @@
-import { Input, Stars } from "./components";
-import { HeartIcon, SendIcon, XCircle } from "./Icons";
+import { Dislike, Input, Like, Stars } from "./components";
+import { HeartEmptyIcon, HeartFullIcon, SendIcon, XCircle } from "./Icons";
 
-export const Product = ({ id, name, image, description, price, stars }: { id: string, name: string, image: string, description: string | null, price: number, stars: number}) => {
+export const Product = ({
+  id, 
+  name, 
+  image, 
+  description, 
+  price, 
+  stars,
+  likes
+}: { 
+  id: string, 
+  name: string, 
+  image: string, 
+  description: string | null, 
+  price: number, 
+  stars: number,
+  likes: { id: string }[]
+}) => {
   return <section class="py-8">
   <div class="mx-auto max-w-7xl px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2">
@@ -25,11 +41,10 @@ export const Product = ({ id, name, image, description, price, stars }: { id: st
                           <Stars num={stars}/>
                           <p class="font-normal text-xl text-slate-300">{description}</p>
                       </div>
-                      <button type="button" class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2">
-                        <HeartIcon/>
-
-                        <span class="sr-only">Icon description</span>
-                      </button>
+                      { likes[0]
+                        ? <Dislike id={likes[0].id} item_id={id}/>
+                        : <Like item_id={id}/>
+                      }
                   </div>
                   
                 <details class="open">

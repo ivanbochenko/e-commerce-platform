@@ -2,6 +2,10 @@ create item page
 
 liked items api
 
+stars api
+
 my items page
 
 user profile
+
+search bar

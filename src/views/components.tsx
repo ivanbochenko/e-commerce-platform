@@ -1,4 +1,4 @@
-import { AngleLeftIcon, EnvelopeSolidIcon, ImagePlaceholderIcon, SearchIcon, StarIcon } from "./Icons";
+import { AngleLeftIcon, EnvelopeSolidIcon, HeartEmptyIcon, HeartFullIcon, ImagePlaceholderIcon, SearchIcon, StarIcon } from "./Icons";
 import { Layout } from "./layout";
 
 export const ServerMessage = ({text, success}: {text: string, success: boolean}) => {
@@ -98,4 +98,21 @@ export const Inbox = ({count}: {count: number}) => {
     </div>
     { count > 0 ? <div class="absolute size-6 bg-sky-600 rounded-full animate-ping -top-2 -end-2"/> : null }
   </a>
+}
+
+export const Like = ({item_id}: {item_id: string}) => {
+  return<button hx-post={'/product/like/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
+    <div class='m-4'>
+      <HeartEmptyIcon/>
+    </div>
+  </button>
+}
+
+export const Dislike = ({id, item_id}: {id:string, item_id: string}) => {
+  return <button hx-post={'/product/dislike/' + id + '/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
+  
+    <div class='m-4'>
+      <HeartFullIcon/>
+    </div>
+  </button>
 }

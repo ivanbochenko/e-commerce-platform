@@ -20,6 +20,7 @@ model User {
   messages    Message[]
   chats       Chat[]
   reads       Read[]
+  likes       Like[]
 }
 
 model Item {
@@ -32,6 +33,7 @@ model Item {
   description String?
   stars       Int        @default(0)
   chats       Chat[]
+  likes       Like[]
 }
 
 model Message {
@@ -61,4 +63,12 @@ model Chat {
   item        Item     @relation(fields: [item_id], references: [id])
   item_id     String
   messages    Message[]
+}
+
+model Like {
+  id          String  @id @default(uuid())
+  user        User    @relation(fields: [user_id], references: [id])
+  user_id     String
+  item        Item    @relation(fields: [item_id], references: [id])
+  item_id     String
 }
