@@ -26,22 +26,32 @@ export const ChatView = ({chatList}: {chatList: {id: string, item: {name: string
   </Layout>
 }
 
-export const MessageInput = ({trade_id}: {trade_id: string}) => {
-  return <div class='px-4 pb-4'>
-    <form
-      hx-post={'/chat/message/'+ trade_id}
-      hx-swap="outerHTML"
-      class='relative w-full'
-    >
-      <input id='text' name="text" placeholder="message..." class="p-4 pe-12 w-full text-slate-100 bg-slate-700 rounded-xl outline-none"/>
-      <button type="submit" class="flex absolute inset-y-0 end-4 mt-4">
-        <SendIcon/>
-      </button>
-    </form>
-  </div>
+export const MessageInput = ({chat_id}: {chat_id: string}) => {
+  return <form
+    hx-post={'/chat/message/'+ chat_id}
+    hx-swap="outerHTML"
+    class='relative w-full'
+  >
+    <input id='text' name="text" placeholder="message..." class="p-4 pe-12 w-full text-slate-100 bg-slate-700 rounded-xl outline-none"/>
+    <button type="submit" class="flex absolute inset-y-0 end-4 mt-4">
+      <SendIcon/>
+    </button>
+  </form>
 }
 
-export const MessageBubble = ({author, time, text}: {author: {name:string}, time: Date, text: string}) => {
+export const MessageBubble = (
+  {
+    author,
+    time,
+    text,
+    read
+  }: {
+    author: {name:string},
+    read: { value: boolean } | null,
+    time: Date,
+    text: string
+  }
+) => {
   return <div class="flex items-start ms-4 my-2 gap-2">
     <UserIcon size={8}/>
     <div class="flex flex-col gap-1 w-full">
@@ -52,7 +62,7 @@ export const MessageBubble = ({author, time, text}: {author: {name:string}, time
             {time.getHours()}:{(time.getMinutes() < 10 ? '0' : '') + time.getMinutes()}
           </span>
         </div>
-        {/* <span class="text-sm font-normal text-slate-500">Delivered</span> */}
+        <span class="text-sm font-normal text-slate-400">{ read?.value === false ? 'unread' : 'read' }</span>
     </div>
   </div>
 }

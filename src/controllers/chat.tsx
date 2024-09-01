@@ -4,7 +4,7 @@ import { ChatView, MessageBubble, MessageInput } from "../views/chat";
 
 export const chatRoute = new Elysia({prefix: '/chat'})
   .get('/', async ({ cookie: {user_id}}) => {
-    const chats = await db.trade.findMany({ 
+    const chats = await db.chat.findMany({ 
       where: {
         OR: [
           { user_id: user_id.value },
@@ -23,42 +23,57 @@ export const chatRoute = new Elysia({prefix: '/chat'})
 
     return <ChatView chatList={chats}/>
   })
-  .get('/:trade_id', async ({ params: { trade_id }}) => {
-    const trade = await db.trade.findUnique({
+  .get('/:chat_id', async ({ cookie: {user_id}, params: { chat_id }}) => {
+    const chat = await db.chat.findUnique({
       where: {
-        id: trade_id
+        id: chat_id
       },
       select: {
         id: true,
         item: true,
         messages: {
           include: {
-            author: true
+            author: true,
+            read: true
           },
           orderBy: { time: 'desc' }
         },
       }
     })
 
-    if (!trade) return <h1>No messages!</h1>
+    const read = await db.read.updateMany({
+      where: {
+        user_id: user_id.value,
+        message: {
+          chat_id
+        }
+      },
+      data: {
+        value: true
+      }
+    })
+
+    if (!chat) return <h1>No messages!</h1>
 
     return (
       <div class="flex flex-col grow w-full h-full justify-between">
         <div class='flex justify-center relative'>
-          <h1 class="absolute top-2 text-xl font-bold text-slate-300">{ trade.item.name }</h1>
+          <h1 class="absolute top-2 text-xl font-bold text-slate-300">{ chat.item.name }</h1>
         </div>
         <div
-          hx-get={'/chat/new/' + trade_id}
+          // hx-get={ + chat_id}
           // hx-trigger="every 5s"
           class='flex flex-col-reverse flex-auto h-full overflow-auto'
         >
-          {trade.messages.map( m => <MessageBubble {...m}/>)}
+          {chat.messages.map( m => <MessageBubble {...m}/>)}
         </div>
-        <MessageInput trade_id={trade.id}/>
+        <div class='px-4 pb-4'>
+          <MessageInput chat_id={chat.id}/>
+        </div>
       </div>
     )
   })
-  .post('/message/:trade_id', async ({ body: { text }, cookie: { user_id }, params: {trade_id}, redirect }) => {
+  .post('/message/:chat_id', async ({ body: { text }, cookie: { user_id }, params: {chat_id}, redirect }) => {
     if (!user_id.value) {
       return redirect('/auth')
     }
@@ -66,12 +81,13 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       data: {
         text,
         author_id: user_id.value,
-        trade_id
+        chat_id
       },
       select: {
         id: true,
-        trade: {
+        chat: {
           select: {
+            user_id: true,
             item: {
               select: { user_id: true }
             }
@@ -79,33 +95,48 @@ export const chatRoute = new Elysia({prefix: '/chat'})
         }
       }
     })
+    
+    const readUser = user_id.value == message.chat.user_id ? message.chat.item.user_id : message.chat.user_id
+
     const read = await db.read.create({
       data: {
-        user_id: message.trade.item.user_id,
-        message_id: message.id
+        message_id: message.id,
+        user_id: readUser,
       }
     })
-    return <MessageInput trade_id={trade_id}/>
+    return <MessageInput chat_id={chat_id}/>
   },{
     body: t.Object({
       text: t.String()
     })
   }
 )
-.ws('/:trade_id', {
+.post('/new/:item_id', async ({ params: { item_id }, cookie: { user_id }, redirect }) => {
+  if (!user_id.value) {
+    return redirect('/auth')
+  }
+  const newChat = await db.chat.create({
+    data: {
+      item_id,
+      user_id: user_id.value
+    }
+  })
+  return {}
+})
+.ws('/:chat_id', {
   params: t.Object({
-    trade_id: t.String()
+    chat_id: t.String()
   }),
   body: t.Object({
     text: t.String(),
     author_id: t.String(),
   }),
   open(ws) {
-    ws.subscribe(ws.data.params.trade_id)
+    ws.subscribe(ws.data.params.chat_id)
   },
   async message(ws, message) {
     const newMessage = await db.message.create({
-      data: { ...message, trade_id: ws.data.params.trade_id },
+      data: { ...message, chat_id: ws.data.params.chat_id },
       include: {
         author: {
           select: {
@@ -115,10 +146,10 @@ export const chatRoute = new Elysia({prefix: '/chat'})
         }
       }
     })
-    ws.publish(ws.data.params.trade_id, newMessage)
+    ws.publish(ws.data.params.chat_id, newMessage)
   },
   close(ws) {
-    ws.unsubscribe(ws.data.params.trade_id)
+    ws.unsubscribe(ws.data.params.chat_id)
   },
 })
 

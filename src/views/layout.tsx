@@ -1,5 +1,5 @@
 import { Inbox } from "./components";
-import { AvatarIcon, EnvelopeSolidIcon, UserIcon } from "./Icons"
+import { AvatarIcon } from "./Icons"
 
 const css = `
 .htmx-indicator{

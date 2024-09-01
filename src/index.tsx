@@ -42,7 +42,7 @@ const app = new Elysia()
       <Layout>
         <>
           <Search/>
-          <main class='grid grid-cols-3 gap-8 md:w-5/6 md:mx-auto'>
+          <main class='md:grid md:grid-cols-3 gap-8 w-5/6 mx-auto'>
             {items.map( item =>
               <Item {...item}/>
             )}
@@ -67,13 +67,21 @@ console.log(
 );
 
 // console.log(
-//   await db.user.create({
-//     data: {
-//       id: '1',
-//       name: 'ivan',
-//       email: 'ivan@gmail.com',
-//       password: await Bun.password.hash('123')
-//     }
+//   await db.user.createMany({
+//     data: [
+//       {
+//         id: '2',
+//         name: 'test',
+//         email: 'test@gmail.com',
+//         password: await Bun.password.hash('123')
+//       },
+//       {
+//         id: '1',
+//         name: 'Ivan',
+//         email: 'ivan@gmail.com',
+//         password: await Bun.password.hash('123')
+//       }
+//     ]
 //   })
 // );
 

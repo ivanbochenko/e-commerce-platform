@@ -1,7 +1,7 @@
 import { Stars } from "./components";
 import { HeartIcon } from "./Icons";
 
-export const Product = ({ name, image, description, price, stars }: {name: string, image: string, description: string | null, price: number, stars: number}) => {
+export const Product = ({ id, name, image, description, price, stars }: { id: string, name: string, image: string, description: string | null, price: number, stars: number}) => {
   return <section class="py-8">
   <div class="mx-auto max-w-7xl px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2">
@@ -33,7 +33,9 @@ export const Product = ({ name, image, description, price, stars }: {name: strin
                   </div>
                   
                   <button
-                      class="text-center w-full p-4 rounded-full bg-slate-800 flex items-center justify-center font-semibold text-lg text-slate-300 transition-all duration-500 hover:bg-slate-700">
+                    hx-post={'/chat/new/' + id}
+                    class="text-center w-full p-4 rounded-full bg-slate-800 flex items-center justify-center font-semibold text-lg text-slate-300 transition-all duration-500 hover:bg-slate-700"
+                  >
                       Contact
                   </button>
               </div>

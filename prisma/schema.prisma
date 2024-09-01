@@ -18,8 +18,8 @@ model User {
   name        String
   items       Item[]
   messages    Message[]
-  trades      Trade[]
-  Read        Read[]
+  chats       Chat[]
+  reads       Read[]
 }
 
 model Item {
@@ -31,7 +31,7 @@ model Item {
   image       String
   description String?
   stars       Int        @default(0)
-  trades      Trade[]
+  chats       Chat[]
 }
 
 model Message {
@@ -40,9 +40,9 @@ model Message {
   text        String
   author      User     @relation(fields: [author_id], references: [id])
   author_id   String
-  trade       Trade    @relation(fields: [trade_id], references: [id])
-  trade_id    String
-  read        Read[]
+  chat        Chat     @relation(fields: [chat_id], references: [id])
+  chat_id     String
+  read        Read?
 }
 
 model Read {
@@ -50,11 +50,11 @@ model Read {
   user        User     @relation(fields: [user_id], references: [id])
   user_id     String
   message     Message  @relation(fields: [message_id], references: [id])
-  message_id  String
+  message_id  String   @unique
   value       Boolean  @default(false)
 }
 
-model Trade {
+model Chat {
   id          String   @id @default(uuid())
   user        User     @relation(fields: [user_id], references: [id])
   user_id     String
