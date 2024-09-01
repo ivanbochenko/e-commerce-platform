@@ -16,14 +16,14 @@ export const authRoute = new Elysia({prefix: '/auth'})
     
     if (!user) {
       set.status = 401
-      return <ServerMessage success={false} text="User not found"/>
+      return <ServerMessage text="User not found"/>
     }
 
     const isMatch = await Bun.password.verify(password, user.password)
     
     if (!isMatch) {
       set.status = 401
-      return <ServerMessage  success={false} text="Wrong password"/>
+      return <ServerMessage text="Wrong password"/>
     }
     
     auth.set({
@@ -38,16 +38,16 @@ export const authRoute = new Elysia({prefix: '/auth'})
       password: t.String()
     })
   })
-  .post('register', async ({ set, body: { email, name, password, password2 }, jwt, cookie: { auth } }) => {
+  .post('/register', async ({ set, body: { email, name, password, password2 }, jwt, cookie: { auth } }) => {
     const exists = await db.user.count({ where: { email } }) > 0
     if (exists) {
       set.status = 401
-      return <ServerMessage success={false} text="User exists"/>
+      return <ServerMessage text="User exists"/>
     }
 
     if (password !== password2) {
       set.status = 401
-      return <ServerMessage success={false} text="Passwords dont match"/>
+      return <ServerMessage text="Passwords dont match"/>
     }
 
     const user = await db.user.create({
@@ -71,8 +71,7 @@ export const authRoute = new Elysia({prefix: '/auth'})
       password2: t.String()
     })
   })
-  .post('/restore',
-    async ({ body: { email } }) => {
+  .post('/restore', async ({ body: { email } }) => {
       await new Promise(res => setTimeout(res, 2000))
       // const password = (Math.random() + 1).toString(36).substring(7)
       // const hash = await Bun.password.hash(password)

@@ -1,7 +1,7 @@
 import { AngleLeftIcon, EnvelopeSolidIcon, HeartEmptyIcon, HeartFullIcon, ImagePlaceholderIcon, SearchIcon, StarIcon } from "./Icons";
 import { Layout } from "./layout";
 
-export const ServerMessage = ({text, success}: {text: string, success: boolean}) => {
+export const ServerMessage = ({text, success=false}: {text: string, success?: boolean}) => {
   const style = 'text-xl ' + (success ? "text-green-400" : "text-red-400")
 
   return <div class="w-full rounded-lg bg-slate-600">
@@ -34,10 +34,10 @@ export const Button = ({message}: {message?: string}) => {
     </button>
 }
 
-export const Input = ({name, placeholder, title}: {name: string, placeholder: string, title?: string}) => {
+export const Input = ({name, placeholder, title, type}: {name: string, placeholder: string, title?: string, type?: string}) => {
   return <div>
-      <label for={name} class="block mb-2 text-sm font-medium text-slate-300">{ title ?? `Your ${name}`}</label>
-      <input type={name} name={name} id={name} class="bg-slate-700 text-slate-100 rounded-lg block w-full p-2 placeholder-slate-400" placeholder={placeholder} required={true}/>
+      <label for={name} class="block mb-2 text-sm font-medium text-slate-300">{ title ?? `Enter ${name}`}</label>
+      <input type={type ?? name} name={name} id={name} class="bg-slate-700 text-slate-100 rounded-lg block w-full p-2 placeholder-slate-400" placeholder={placeholder} required={true}/>
   </div>
 }
 

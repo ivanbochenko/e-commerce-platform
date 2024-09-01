@@ -1,13 +1,15 @@
-import Elysia from "elysia"
+import Elysia, { t } from "elysia"
 import { db } from "../db";
 import { Layout } from "../views/layout";
 import { ItemView } from "../views/item";
-import { Dislike, Item, Like, NotFound } from "../views/components";
+import { Dislike, Item, Like, NotFound, ServerMessage } from "../views/components";
 import { NewItem } from "../views/new_item";
 
 export const itemRoute = new Elysia({prefix: '/item'})
   .get('/', async ({ cookie : { user_id }}) => {
-    return <Layout>hi</Layout>
+    return <Layout>
+      <NewItem/>
+    </Layout>
   })
   .get('/:id', async ({params: { id }, cookie: { user_id }}) => {
     const item = await db.item.findUnique({
@@ -25,10 +27,21 @@ export const itemRoute = new Elysia({prefix: '/item'})
       <ItemView {...item}/>
     </Layout>
   })
-  .get('/new', async () => {
-    return <Layout>
-      <NewItem/>
-    </Layout>
+  .post('/new', async ({ body, cookie: {user_id} }) => {
+    
+    const item = await db.item.create({
+      data: {...body, user_id: user_id.value!}
+    })
+    
+    
+    return <ServerMessage success text="Created"/>
+  },{
+    body: t.Object({
+      name: t.String(),
+      image: t.String(),
+      description: t.String(),
+      price: t.Number()
+    })
   })
   .get('user/:id', async ({ params: {id}}) => {
     const items = await db.item.findMany({
