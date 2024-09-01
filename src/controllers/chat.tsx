@@ -1,6 +1,7 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
 import { ChatView, MessageBubble, MessageInput } from "../views/chat";
+import { TrashIcon } from "../views/Icons";
 
 export const chatRoute = new Elysia({prefix: '/chat'})
   .get('/', async ({ cookie: {user_id}}) => {
@@ -57,9 +58,9 @@ export const chatRoute = new Elysia({prefix: '/chat'})
 
     return (
       <div class="flex flex-col grow w-full h-full justify-between">
-        <div class='flex justify-center relative'>
+        <a href={"/product/" + chat.item.id} class='flex justify-center relative'>
           <h1 class="absolute top-2 text-xl font-bold text-slate-300">{ chat.item.name }</h1>
-        </div>
+        </a>
         <div
           // hx-get={ + chat_id}
           // hx-trigger="every 5s"
@@ -115,13 +116,21 @@ export const chatRoute = new Elysia({prefix: '/chat'})
   if (!user_id.value) {
     return redirect('/auth')
   }
-  const newChat = await db.chat.create({
-    data: {
+  const chat = await db.chat.count({
+    where: {
       item_id,
       user_id: user_id.value
     }
   })
-  return {}
+  if (chat == 0) {
+    const chat = await db.chat.create({
+      data: {
+        item_id,
+        user_id: user_id.value
+      }
+    })
+  }
+  return 'Chat created'
 })
 .ws('/:chat_id', {
   params: t.Object({

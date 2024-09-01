@@ -42,7 +42,7 @@ const app = new Elysia()
       <Layout>
         <>
           <Search/>
-          <main class='md:grid md:grid-cols-3 gap-8 w-5/6 mx-auto'>
+          <main class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-4 sm:mx-8 md:w-5/6 md:mx-auto'>
             {items.map( item =>
               <Item {...item}/>
             )}

@@ -1,5 +1,5 @@
 import { Stars } from "./components";
-import { HeartIcon } from "./Icons";
+import { HeartIcon, XCircle } from "./Icons";
 
 export const Product = ({ id, name, image, description, price, stars }: { id: string, name: string, image: string, description: string | null, price: number, stars: number}) => {
   return <section class="py-8">
@@ -32,12 +32,20 @@ export const Product = ({ id, name, image, description, price, stars }: { id: st
                       </button>
                   </div>
                   
-                  <button
-                    hx-post={'/chat/new/' + id}
-                    class="text-center w-full p-4 rounded-full bg-slate-800 flex items-center justify-center font-semibold text-lg text-slate-300 transition-all duration-500 hover:bg-slate-700"
+                <details class="open">
+                  <summary
+                    // hx-post={'/chat/new/' + id}
+                    class="text-center w-full p-4 rounded-full bg-slate-800 flex items-center justify-center font-semibold text-lg text-slate-300 transition-all duration-500 hover:bg-slate-700 cursor-pointer"
                   >
                       Contact
-                  </button>
+                  </summary>
+
+                  <div class="bg-slate-800 rounded-2xl size-1/2 my-auto mx-auto absolute inset-0 text-slate-300 p-4 shadow">
+                    <button class='absolute -right-4 -top-4' onclick="document.querySelector('details').removeAttribute('open')">
+                      <XCircle/>
+                    </button>
+                  </div>
+                </details>
               </div>
           </div>
       </div>

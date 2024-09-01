@@ -2,9 +2,9 @@ import { AngleLeftIcon, EnvelopeSolidIcon, ImagePlaceholderIcon, SearchIcon, Sta
 import { Layout } from "./layout";
 
 export const ServerMessage = ({text, success}: {text: string, success: boolean}) => {
-  const style = success ? "text-green-400" : "text-red-400"
+  const style = 'text-xl ' + (success ? "text-green-400" : "text-red-400")
 
-  return <div class="w-full rounded-lg">
+  return <div class="w-full rounded-lg bg-slate-600">
       <div class="flex flex-col items-center p-4 space-y-4">
         <span class={style}>{text}</span>
         <HomeButton/>
@@ -28,10 +28,17 @@ export const NotFound = ({text}:{text?:string}) => {
 export const Spinner = () => <img class="htmx-indicator mx-2 w-8" src="../../public/three-dots.svg"/>
 
 export const Button = ({message}: {message?: string}) => {
-  return <button type="submit" class="w-full text-slate-300 bg-slate-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+  return <button type="submit" class="w-full text-slate-300 bg-slate-700 font-medium rounded-lg p-2 text-center">
       {message}
       <Spinner/>
     </button>
+}
+
+export const Input = ({name, placeholder, title}: {name: string, placeholder: string, title?: string}) => {
+  return <div>
+      <label for={name} class="block mb-2 text-sm font-medium text-slate-300">{ title ?? `Your ${name}`}</label>
+      <input type={name} name={name} id={name} class="bg-slate-700 text-slate-100 rounded-lg block w-full p-2 placeholder-slate-400" placeholder={placeholder} required={true}/>
+  </div>
 }
 
 export const HomeButton = ({}) => {
@@ -89,6 +96,6 @@ export const Inbox = ({count}: {count: number}) => {
     <div class="absolute inline-flex items-center justify-center size-6 z-10 text-xs font-bold text-slate-100 bg-sky-600 border-2 border-slate-100 rounded-full -top-2 -end-2">
       {count}
     </div>
-    <div class="absolute size-6 bg-sky-600 rounded-full animate-ping -top-2 -end-2"/>
+    { count > 0 ? <div class="absolute size-6 bg-sky-600 rounded-full animate-ping -top-2 -end-2"/> : null }
   </a>
 }

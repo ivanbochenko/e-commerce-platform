@@ -38,14 +38,14 @@ export const authRoute = new Elysia({prefix: '/auth'})
       password: t.String()
     })
   })
-  .post('register', async ({ set, body: { email, name, password1, password2 }, jwt, cookie: { auth } }) => {
+  .post('register', async ({ set, body: { email, name, password, password2 }, jwt, cookie: { auth } }) => {
     const exists = await db.user.count({ where: { email } }) > 0
     if (exists) {
       set.status = 401
       return <ServerMessage success={false} text="User exists"/>
     }
 
-    if (password1 !== password2) {
+    if (password !== password2) {
       set.status = 401
       return <ServerMessage success={false} text="Passwords dont match"/>
     }
@@ -54,7 +54,7 @@ export const authRoute = new Elysia({prefix: '/auth'})
       data: {
         email,
         name,
-        password: password1
+        password
       }
     })
     
@@ -67,7 +67,7 @@ export const authRoute = new Elysia({prefix: '/auth'})
     body: t.Object({
       email: t.String(),
       name: t.String(),
-      password1: t.String(),
+      password: t.String(),
       password2: t.String()
     })
   })
