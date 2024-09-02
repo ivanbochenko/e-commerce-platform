@@ -27,20 +27,21 @@ export const itemRoute = new Elysia({prefix: '/item'})
       <ItemView {...item}/>
     </Layout>
   })
-  .post('/new', async ({ body, cookie: {user_id} }) => {
+  .post('/add', async ({ body: { name, price, image, description }, cookie: {user_id} }) => {
+    console.log(name);
     
     const item = await db.item.create({
-      data: {...body, user_id: user_id.value!}
+      data: { name, image, price: +price, description, user_id: user_id.value!}
     })
     
     
     return <ServerMessage success text="Created"/>
-  },{
+  }, {
     body: t.Object({
       name: t.String(),
       image: t.String(),
       description: t.String(),
-      price: t.Number()
+      price: t.String()
     })
   })
   .get('user/:id', async ({ params: {id}}) => {

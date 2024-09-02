@@ -56,15 +56,15 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     if (!chat) return <h1>No messages!</h1>
 
     return (
-      <div class="flex flex-col grow w-full h-full justify-between">
+      <div
+        // hx-get={ '/chat/' + chat_id}
+        // hx-trigger="load delay:2s"
+        class="flex flex-col grow w-full h-full justify-between"
+      >
         <a href={"/item/" + chat.item.id} class='flex justify-center relative'>
           <h1 class="absolute top-2 text-xl font-bold text-slate-300">{ chat.item.name }</h1>
         </a>
-        <div
-          // hx-get={ + chat_id}
-          // hx-trigger="every 5s"
-          class='flex flex-col-reverse flex-auto h-full overflow-auto'
-        >
+        <div class='flex flex-col-reverse flex-auto h-full overflow-auto'>
           {chat.messages.map( m => <MessageBubble {...m}/>)}
         </div>
         <div class='px-4 pb-4'>
@@ -104,7 +104,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
         user_id: readUser,
       }
     })
-    return <MessageInput chat_id={chat_id}/>
+    return 'Success'
   },{
     body: t.Object({
       text: t.String()
@@ -163,19 +163,24 @@ export const chatRoute = new Elysia({prefix: '/chat'})
   })
 })
 .ws('/:chat_id', {
-  params: t.Object({
-    chat_id: t.String()
-  }),
   body: t.Object({
     text: t.String(),
-    author_id: t.String(),
+  }),
+  cookie: t.Cookie({
+    user_id: t.String()
   }),
   open(ws) {
     ws.subscribe(ws.data.params.chat_id)
   },
-  async message(ws, message) {
-    const newMessage = await db.message.create({
-      data: { ...message, chat_id: ws.data.params.chat_id },
+  async message(ws, { text }) {
+    const author_id = ws.data.cookie.user_id.value
+    const chat_id = ws.data.params.chat_id
+    const message = await db.message.create({
+      data: {
+        text,
+        author_id,
+        chat_id
+      },
       include: {
         author: {
           select: {
@@ -185,7 +190,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
         }
       }
     })
-    ws.publish(ws.data.params.chat_id, newMessage)
+    ws.publish(chat_id, message)
   },
   close(ws) {
     ws.unsubscribe(ws.data.params.chat_id)

@@ -25,7 +25,9 @@ export const NotFound = ({text}:{text?:string}) => {
   </Layout>
 }
 
-export const Spinner = () => <img class="htmx-indicator mx-2 w-8" src="../../public/three-dots.svg"/>
+export const Spinner = () => <span class="htmx-indicator">  
+  <img class="mx-2 w-8" src="../../public/three-dots.svg"/>
+</span>
 
 export const Button = ({message}: {message?: string}) => {
   return <button type="submit" class="w-full text-slate-300 bg-slate-700 font-medium rounded-lg p-2 text-center">
@@ -37,7 +39,7 @@ export const Button = ({message}: {message?: string}) => {
 export const Input = ({name, placeholder, title, type}: {name: string, placeholder: string, title?: string, type?: string}) => {
   return <div>
       <label for={name} class="block mb-2 text-sm font-medium text-slate-300">{ title ?? `Enter ${name}`}</label>
-      <input type={type ?? name} name={name} id={name} class="bg-slate-700 text-slate-100 rounded-lg block w-full p-2 placeholder-slate-400" placeholder={placeholder} required={true}/>
+      <input type={type ?? 'text'} name={name} class="bg-slate-700 text-slate-100 rounded-lg block w-full p-2 placeholder-slate-400" placeholder={placeholder ?? name} required={true}/>
   </div>
 }
 
@@ -84,7 +86,21 @@ export const Search = ({}) => {
         <div class="absolute inset-y-0 start-0 flex items-center ms-2 pointer-events-none">
           <SearchIcon/>
         </div>
-        <input type="search" id="default-search" class="block w-full p-2 ps-10 text-slate-100 font-normal transition duration-300 ease-in-out rounded-lg bg-slate-700 focus:outline-none" placeholder="Search" required />
+        <input
+          type="search" 
+          name="search"
+          placeholder="Search..." 
+          hx-post="/search" 
+          hx-trigger="input changed delay:500ms, search" 
+          hx-target="#search-results" 
+          hx-swap='outerHTML'
+          hx-indicator=".htmx-indicator"
+          class="form-control block w-full p-2 ps-10 text-slate-100 font-normal transition duration-300 ease-in-out rounded-lg bg-slate-700 focus:outline-none"
+          required
+        />
+        <div class='absolute inset-y-0 end-8 flex items-center'>
+          <Spinner/>
+        </div>
       </div>
     </form>
   )

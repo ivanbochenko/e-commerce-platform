@@ -6,11 +6,12 @@
     "dev": "bun run --watch src/index.tsx"
   },
   "dependencies": {
+    "@elysiajs/cors": "^1.1.0",
     "@elysiajs/html": "1.0.2",
     "@elysiajs/jwt": "^1.1.0",
     "@elysiajs/static": "^1.1.0",
     "@prisma/client": "^5.18.0",
-    "elysia": "latest",
+    "elysia": "^1.1.11",
     "nodemailer": "^6.9.14"
   },
   "devDependencies": {

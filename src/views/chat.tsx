@@ -29,7 +29,9 @@ export const ChatView = ({chatList}: {chatList: {id: string, item: {name: string
 export const MessageInput = ({chat_id}: {chat_id: string}) => {
   return <form
     hx-post={'/chat/message/'+ chat_id}
-    hx-swap="outerHTML"
+    // hx-swap="outerHTML"
+    hx-on--after-request="this.reset()"
+    hx-swap="none"
     class='relative w-full'
   >
     <input id='text' name="text" placeholder="message..." class="p-4 pe-12 w-full text-slate-100 bg-slate-700 rounded-xl outline-none"/>

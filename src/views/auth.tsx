@@ -10,8 +10,8 @@ export const LoginView = ({ }) => {
                 Sign in to your account
             </h1>
             <form hx-post="/auth/sign-in" class="space-y-4 md:space-y-6" >
-              <Input name='email' placeholder='name@mail.com'/>
-              <Input name="password" placeholder="••••••••"/>
+              <Input name='email' type="email" placeholder='name@mail.com'/>
+              <Input name="password" type="password" placeholder="••••••••"/>
               <div class="flex items-center justify-between">
                 <a href="/auth/forgot-password" class="text-sm font-medium text-slate-300 hover:underline">Forgot password?</a>
               </div>
@@ -35,7 +35,7 @@ export const ForgotPassView = ({ }) => {
                 Forgot password
             </h1>
             <form hx-post="/auth/restore" class="space-y-4 md:space-y-6" >
-              <Input name='email' placeholder='name@mail.com'/>
+              <Input name='email' type="email" placeholder='name@mail.com'/>
               <Button message="Send me new password"/>
             </form>
           </div>
@@ -54,10 +54,10 @@ export const RegisterView = ({ }) => {
             Create account
           </h1>
           <form hx-post="/auth/register" class="space-y-4 md:space-y-6" >
-            <Input name='email' placeholder='name@mail.com'/>
+            <Input name='email' type="email" placeholder='name@mail.com'/>
             <Input name='name' placeholder='John Sean'/>
-            <Input name="password" placeholder="••••••••"/>
-            <Input name="password2" title="Repeat your password" placeholder="••••••••"/>
+            <Input name="password" type="password" placeholder="••••••••"/>
+            <Input name="password2" type="password" title="Repeat your password" placeholder="••••••••"/>
             <Button message="Sign up"/>
           </form>
         </div>

@@ -1,5 +1,6 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { html } from '@elysiajs/html'
+import { cors } from "@elysiajs/cors";
 import { staticPlugin } from '@elysiajs/static'
 import { Layout } from './views/layout'
 import { userRoute } from "./controllers/user";
@@ -13,6 +14,11 @@ import { items } from "../items";
 
 const app = new Elysia()
   .use(html())
+  .use(
+    cors({
+      origin: undefined,
+    })
+  )
   .use(staticPlugin())
   .use(jwtConfig)
   .onBeforeHandle(async ({ path, jwt, cookie: { auth }, redirect }) => {
@@ -20,6 +26,20 @@ const app = new Elysia()
     if (!payload && !path.startsWith('/auth')) {
       return redirect('/auth/')
     }
+  })
+  .get("/", async () => {
+
+    const items = await db.item.findMany()
+    return (
+      <Layout>
+        <>
+          <Search/>
+          <main id="search-results" class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-4 sm:mx-8 md:w-5/6 md:mx-auto'>
+            {items.map( item => <Item {...item}/> )}
+          </main>
+        </>
+      </Layout>
+    )
   })
   .get('/inbox', async ({ cookie: { user_id }, redirect}) => {
 
@@ -35,29 +55,33 @@ const app = new Elysia()
 
     return <Inbox count={unread}/>
   })
-  .get("/", async () => {
-
-    const items = await db.item.findMany()
-    return (
-      <Layout>
-        <>
-          <Search/>
-          <main class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-4 sm:mx-8 md:w-5/6 md:mx-auto'>
-            {items.map( item =>
-              <Item {...item}/>
-            )}
-          </main>
-        </>
-      </Layout>
-    )
-  }
-  )
+  .post('/search', async ({ body: {search}}) => {
+    const result = await db.item.findMany({
+      where: {
+        OR: [
+          {
+            name: { contains: search }
+          },
+          {
+            description: { contains: search }
+          }
+        ]
+      }
+    })
+    return <main id="search-results" class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-4 sm:mx-8 md:w-5/6 md:mx-auto'>
+      {result.map( item => <Item {...item}/> )}
+    </main>
+  }, {
+    body: t.Object({
+      search: t.String()
+    })
+  })
   .use(userRoute)
   .use(authRoute)
   .use(chatRoute)
   .use(itemRoute)
   .onRequest(({ request }) => {
-      console.log(`Request received: ${request.method}: ${request.url}`);
+      console.log(`Request received: ${request.method}: ${request.url}`)
     }
   )
   .listen(3000);

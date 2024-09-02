@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
-import { LoginView, ForgotPassView, RegisterView } from "../views/login";
+import { LoginView, ForgotPassView, RegisterView } from "../views/auth";
 import { ServerMessage } from "../views/components";
 import { jwtConfig } from "../jwt";
 import { sendEmail } from "../mail";
@@ -10,6 +10,11 @@ export const authRoute = new Elysia({prefix: '/auth'})
   .get('/', ({ }) => <LoginView/>)
   .get('/sign-up', () => <RegisterView/>)
   .get('/forgot-password', () => <ForgotPassView/>)
+  .get('/sign-out', async ({cookie: { auth, user_id }}) => {
+    auth.remove()
+    user_id.remove()
+    return <LoginView/>
+  })
   .post('/sign-in', async ({ set, body: { email, password }, jwt, cookie: { auth, user_id } }) => {
     const user = await db.user.findUnique({ where: { email } })
     // await new Promise(res => setTimeout(res, 2000))
