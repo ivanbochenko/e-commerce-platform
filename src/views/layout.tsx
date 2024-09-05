@@ -19,9 +19,10 @@ export const Layout = ({ children, footer=true, nav=true, fix_h=false }: { child
       <head>
         <title>{process.env.PROJECT_NAME}</title>
         <link rel="shortcut icon" type="image/x-icon" href="/public/favicon.ico"></link>
-        <script src="https://unpkg.com/htmx.org@2.0.2"/>
+        <script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/htmx-ext-sse@2.2.2/sse.js"></script>
         <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"/>
-        <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"/>
+        {/* <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"/> */}
         <script src="https://cdn.tailwindcss.com"/>
         <style>{css}</style>
       </head>

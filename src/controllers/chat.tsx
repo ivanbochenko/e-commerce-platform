@@ -1,6 +1,10 @@
 import Elysia, { t } from "elysia"
 import { db } from "../db";
-import { ChatView, MessageBubble, MessageInput } from "../views/chat";
+import { ChatView, MessageBubble, MessageInput, MessageType } from "../views/chat";
+import Stream from "@elysiajs/stream";
+import { Emitter } from "../../pubsub";
+
+const eventEmitter = new Emitter<MessageType>()
 
 export const chatRoute = new Elysia({prefix: '/chat'})
   .get('/', async ({ cookie: {user_id}}) => {
@@ -65,52 +69,22 @@ export const chatRoute = new Elysia({prefix: '/chat'})
           <h1 class="absolute top-2 text-xl font-bold text-slate-300">{ chat.item.name }</h1>
         </a>
         <div class='flex flex-col-reverse flex-auto h-full overflow-auto'>
+          <div 
+            hx-ext="sse"
+            sse-connect="/chat/stream"
+            sse-swap="message"
+            hx-swap="beforeend"
+            // hx-on-after-settle="this.scrollTo(0, this.scrollHeight);"
+          />
           {chat.messages.map( m => <MessageBubble {...m}/>)}
         </div>
+        
         <div class='px-4 pb-4'>
           <MessageInput chat_id={chat.id}/>
         </div>
       </div>
     )
   })
-  .post('/message/:chat_id', async ({ body: { text }, cookie: { user_id }, params: {chat_id}, redirect }) => {
-    if (!user_id.value) {
-      return redirect('/auth')
-    }
-    const message = await db.message.create({
-      data: {
-        text,
-        author_id: user_id.value,
-        chat_id
-      },
-      select: {
-        id: true,
-        chat: {
-          select: {
-            user_id: true,
-            item: {
-              select: { user_id: true }
-            }
-          }
-        }
-      }
-    })
-    
-    const readUser = user_id.value == message.chat.user_id ? message.chat.item.user_id : message.chat.user_id
-
-    const read = await db.read.create({
-      data: {
-        message_id: message.id,
-        user_id: readUser,
-      }
-    })
-    return 'Success'
-  },{
-    body: t.Object({
-      text: t.String()
-    })
-  }
-)
 .post('/new/:item_id', async ({ body: { text }, params: { item_id }, cookie: { user_id }, redirect }) => {
   if (!user_id.value) {
     return redirect('/auth')
@@ -162,39 +136,99 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     text: t.String()
   })
 })
-.ws('/:chat_id', {
-  body: t.Object({
-    text: t.String(),
-  }),
-  cookie: t.Cookie({
-    user_id: t.String()
-  }),
-  open(ws) {
-    ws.subscribe(ws.data.params.chat_id)
-  },
-  async message(ws, { text }) {
-    const author_id = ws.data.cookie.user_id.value
-    const chat_id = ws.data.params.chat_id
-    const message = await db.message.create({
-      data: {
-        text,
-        author_id,
-        chat_id
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
+.post('/message/:chat_id', async ({ body: { text }, cookie: { user_id }, params: {chat_id}, redirect }) => {
+  if (!user_id.value) {
+    return redirect('/auth')
+  }
+  const message = await db.message.create({
+    data: {
+      text,
+      author_id: user_id.value,
+      chat_id
+    },
+    select: {
+      id: true,
+      text: true,
+      time: true,
+      author: true,
+      read: { select: { value: true }},
+      chat: {
+        select: {
+          user_id: true,
+          item: {
+            select: { user_id: true }
           }
         }
       }
-    })
-    ws.publish(chat_id, message)
-  },
-  close(ws) {
-    ws.unsubscribe(ws.data.params.chat_id)
-  },
-})
+    }
+  })
 
-  
+  eventEmitter.emit(chat_id, message)
+
+  const readUser = user_id.value == message.chat.user_id ? message.chat.item.user_id : message.chat.user_id
+
+  const read = await db.read.create({
+    data: {
+      message_id: message.id,
+      user_id: readUser,
+    }
+  })
+  return 'Success'
+},{
+  body: t.Object({
+    text: t.String()
+  })
+}
+)
+.get('/stream/:chat_id', ({ params: {chat_id} }) =>
+  new Stream(async (stream) => {
+    const messageHandler = (message: any) => {
+      stream.send(
+        <MessageBubble {...message}/>
+      )
+      stream.close()
+    }
+    eventEmitter.subscribe(chat_id, messageHandler)
+  })
+)
+
+
+
+
+
+
+// .ws('/:chat_id', {
+//   body: t.Object({
+//     text: t.String(),
+//   }),
+//   cookie: t.Cookie({
+//     user_id: t.String()
+//   }),
+//   open(ws) {
+//     ws.subscribe(ws.data.params.chat_id)
+//   },
+//   async message(ws, { text }) {
+//     const author_id = ws.data.cookie.user_id.value
+//     const chat_id = ws.data.params.chat_id
+//     const message = await db.message.create({
+//       data: {
+//         text,
+//         author_id,
+//         chat_id
+//       },
+//       include: {
+//         read: true,
+//         author: {
+//           select: {
+//             id: true,
+//             name: true,
+//           }
+//         }
+//       }
+//     })
+//     ws.publish(chat_id, message)
+//   },
+//   close(ws) {
+//     ws.unsubscribe(ws.data.params.chat_id)
+//   },
+// })

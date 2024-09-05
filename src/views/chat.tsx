@@ -41,19 +41,7 @@ export const MessageInput = ({chat_id}: {chat_id: string}) => {
   </form>
 }
 
-export const MessageBubble = (
-  {
-    author,
-    time,
-    text,
-    read
-  }: {
-    author: {name:string},
-    read: { value: boolean } | null,
-    time: Date,
-    text: string
-  }
-) => {
+export const MessageBubble = ({ author, time, text, read }: MessageType ) => {
   return <div class="flex items-start ms-4 my-2 gap-2">
     <UserIcon size={8}/>
     <div class="flex flex-col gap-1 w-full">
@@ -67,4 +55,11 @@ export const MessageBubble = (
         <span class="text-sm font-normal text-slate-400">{ read?.value === false ? 'unread' : 'read' }</span>
     </div>
   </div>
+}
+
+export type MessageType = {
+  author: { id: string, name: string },
+  read: { value: boolean } | null,
+  time: Date,
+  text: string
 }
