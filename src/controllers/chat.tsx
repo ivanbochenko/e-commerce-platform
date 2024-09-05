@@ -4,9 +4,8 @@ import { ChatView, MessageBubble, MessageInput, MessageType } from "../views/cha
 import Stream from "@elysiajs/stream";
 import { Emitter } from "../../pubsub";
 
-const eventEmitter = new Emitter<MessageType>()
-
 export const chatRoute = new Elysia({prefix: '/chat'})
+  .decorate('emitter',  new Emitter<MessageType>())
   .get('/', async ({ cookie: {user_id}}) => {
     const chats = await db.chat.findMany({ 
       where: {
@@ -136,7 +135,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     text: t.String()
   })
 })
-.post('/message/:chat_id', async ({ body: { text }, cookie: { user_id }, params: {chat_id}, redirect }) => {
+.post('/message/:chat_id', async ({ body: { text }, cookie: { user_id }, params: {chat_id}, redirect, emitter }) => {
   if (!user_id.value) {
     return redirect('/auth')
   }
@@ -163,7 +162,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     }
   })
 
-  eventEmitter.emit(chat_id, message)
+  emitter.emit(chat_id, message)
 
   const readUser = user_id.value == message.chat.user_id ? message.chat.item.user_id : message.chat.user_id
 
@@ -180,7 +179,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
   })
 }
 )
-.get('/stream/:chat_id', ({ params: {chat_id} }) =>
+.get('/stream/:chat_id', ({ params: {chat_id}, emitter }) =>
   new Stream((stream) => {
     const messageHandler = (message: any) => {
       stream.send(
@@ -188,7 +187,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       )
       stream.close()
     }
-    eventEmitter.subscribe(chat_id, messageHandler)
+    emitter.subscribe(chat_id, messageHandler)
   })
 )
 
