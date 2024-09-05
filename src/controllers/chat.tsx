@@ -71,10 +71,10 @@ export const chatRoute = new Elysia({prefix: '/chat'})
         <div class='flex flex-col-reverse flex-auto h-full overflow-auto'>
           <div 
             hx-ext="sse"
-            sse-connect="/chat/stream"
+            sse-connect={"/chat/stream/" + chat_id}
             sse-swap="message"
             hx-swap="beforeend"
-            // hx-on-after-settle="this.scrollTo(0, this.scrollHeight);"
+            hx-on-after-settle="this.scrollTo(0, this.scrollHeight);"
           />
           {chat.messages.map( m => <MessageBubble {...m}/>)}
         </div>
@@ -181,7 +181,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
 }
 )
 .get('/stream/:chat_id', ({ params: {chat_id} }) =>
-  new Stream(async (stream) => {
+  new Stream((stream) => {
     const messageHandler = (message: any) => {
       stream.send(
         <MessageBubble {...message}/>
