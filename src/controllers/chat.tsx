@@ -2,7 +2,7 @@ import Elysia, { t } from "elysia"
 import { db } from "../db";
 import { ChatView, MessageBubble, MessageInput, MessageType } from "../views/chat";
 import Stream from "@elysiajs/stream";
-import { Emitter } from "../../pubsub";
+import { Emitter } from "../pubsub";
 
 export const chatRoute = new Elysia({prefix: '/chat'})
   .decorate('emitter',  new Emitter<MessageType>())

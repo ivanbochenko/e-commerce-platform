@@ -10,7 +10,6 @@ import { authRoute } from "./controllers/auth";
 import { chatRoute } from "./controllers/chat";
 import { Inbox, Item, Search } from "./views/components";
 import { itemRoute } from "./controllers/item";
-import { items } from "../items";
 
 const app = new Elysia()
   .use(html())
@@ -89,29 +88,3 @@ const app = new Elysia()
 console.log(
   `${process.env.PROJECT_NAME} is running at ${app.server?.hostname}:${app.server?.port}`
 );
-
-// console.log(
-//   await db.user.createMany({
-//     data: [
-//       {
-//         id: '2',
-//         name: 'test',
-//         email: 'test@gmail.com',
-//         password: await Bun.password.hash('123')
-//       },
-//       {
-//         id: '1',
-//         name: 'Ivan',
-//         email: 'ivan@gmail.com',
-//         password: await Bun.password.hash('123')
-//       }
-//     ]
-//   })
-// );
-
-// console.log(
-//   await db.item.createMany({
-//     data: items
-//   })
-// );
-
