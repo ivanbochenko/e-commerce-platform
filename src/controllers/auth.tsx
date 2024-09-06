@@ -77,17 +77,16 @@ export const authRoute = new Elysia({prefix: '/auth'})
     })
   })
   .post('/restore', async ({ body: { email } }) => {
-      await new Promise(res => setTimeout(res, 2000))
-      // const password = (Math.random() + 1).toString(36).substring(7)
-      // const hash = await Bun.password.hash(password)
-      // const updatedUser = await db.user.update({
-      //   where: { email },
-      //   data: { password: hash }
-      // })
-      // if (!updatedUser) {
-      //   return <ServerMessage  success={false} text='User does not exist'/>
-      // }
-      // sendEmail(email, updatedUser?.name!, password)
+      const password = (Math.random() + 1).toString(36).substring(7)
+      const hash = await Bun.password.hash(password)
+      const updatedUser = await db.user.update({
+        where: { email },
+        data: { password: hash }
+      })
+      if (!updatedUser) {
+        return <ServerMessage  success={false} text='User does not exist'/>
+      }
+      sendEmail(email, updatedUser.name, password)
       return <ServerMessage success text='Check email'/>
     },
     {
