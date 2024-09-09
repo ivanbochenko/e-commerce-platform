@@ -136,13 +136,14 @@ export const chatRoute = new Elysia({prefix: '/chat'})
   })
 })
 .post('/message/:chat_id', async ({ body: { text }, cookie: { user_id }, params: {chat_id}, redirect, emitter }) => {
-  if (!user_id.value) {
+  const author_id = user_id.value
+  if (!author_id) {
     return redirect('/auth')
   }
   const message = await db.message.create({
     data: {
       text,
-      author_id: user_id.value,
+      author_id,
       chat_id
     },
     select: {
@@ -162,16 +163,18 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     }
   })
 
-  emitter.emit(chat_id, message)
-
-  const readUser = user_id.value == message.chat.user_id ? message.chat.item.user_id : message.chat.user_id
+  const buyer_id = message.chat.user_id
+  const seller_id = message.chat.item.user_id
 
   const read = await db.read.create({
     data: {
       message_id: message.id,
-      user_id: readUser,
+      user_id: author_id == buyer_id ? seller_id : buyer_id,
     }
   })
+
+  emitter.emit(chat_id, message)
+
   return 'Success'
 },{
   body: t.Object({
@@ -180,14 +183,11 @@ export const chatRoute = new Elysia({prefix: '/chat'})
 }
 )
 .get('/stream/:chat_id', ({ params: {chat_id}, emitter }) =>
-  new Stream((stream) => {
-    const messageHandler = (message: any) => {
-      stream.send(
-        <MessageBubble {...message}/>
-      )
-      stream.close()
-    }
-    emitter.subscribe(chat_id, messageHandler)
+  new Stream(stream => {
+    emitter.subscribe(chat_id, m => {
+      stream.send(<MessageBubble {...m}/>)
+    })
+    // stream.close()
   })
 )
 
