@@ -8,7 +8,7 @@ interface Publisher<T> {
 
 export class Emitter<T> implements Publisher<T> {
   private events: Map<string, EventCallback<T>[]>;
-
+  // Store events
   constructor() {
     this.events = new Map();
   }
@@ -31,10 +31,9 @@ export class Emitter<T> implements Publisher<T> {
   // Emit values to consumers
   emit(eventId: string, value: T) {
     if (this.events.size === 0) return;
-    this.events.get(eventId)?.forEach(callback => callback(value));
+    this.events.get(eventId)!.forEach(callback => callback(value));
   }
-
-  /** Removes all subscribed consumers. */
+  // Remove all subscribed consumers
   clear() {
     this.events.clear();
     this.events = new Map();

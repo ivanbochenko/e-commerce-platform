@@ -75,10 +75,10 @@ const app = new Elysia()
       search: t.String()
     })
   })
-  .use(userRoute)
   .use(authRoute)
-  .use(chatRoute)
+  .use(userRoute)
   .use(itemRoute)
+  .use(chatRoute)
   .onRequest(({ request }) => {
       console.log(`Request received: ${request.method}: ${request.url}`)
     }
