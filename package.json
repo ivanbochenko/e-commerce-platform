@@ -4,7 +4,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.tsx",
-    "start": "bun run src/index.tsx"
+    "start": "bun run src/index.tsx",
+    "db-deploy-and-start": "prisma migrate deploy && prisma generate && bun run src/main.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.1.0",

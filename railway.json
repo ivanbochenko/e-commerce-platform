@@ -5,6 +5,6 @@
 		"buildCommand": "bun install && bun run prisma migrate deploy"
 	},
 	"deploy": {
-		"startCommand": "bun run start"
+    "startCommand": "bun run db-deploy-and-start"
 	}
 }
