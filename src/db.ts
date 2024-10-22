@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Database } from "bun:sqlite";
 
-const database = new Database(":memory:");
+export const database = new Database("mydb.sqlite");
 database.exec("PRAGMA journal_mode = WAL;");
 
 export const db = new PrismaClient();

@@ -4,7 +4,7 @@ import { cors } from "@elysiajs/cors";
 import { staticPlugin } from '@elysiajs/static'
 import { Layout } from './views/layout'
 import { userRoute } from "./controllers/user";
-import { db } from "./db";
+import { db, database } from "./db";
 import { jwtConfig } from "./jwt";
 import { authRoute } from "./controllers/auth";
 import { chatRoute } from "./controllers/chat";
