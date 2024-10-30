@@ -50,7 +50,7 @@ export const HomeButton = ({}) => {
   </a>
 }
 
-export const Stars = ({num}: {num: number}) => {
+export const Stars = ({num = 0}: {num?: number}) => {
   return <div class="flex items-center space-x-1 rtl:space-x-reverse">
     {[...Array(5)].map((item, i) => <StarIcon filled={i < num}/>)}
   </div>
@@ -60,8 +60,8 @@ interface Item {
   name: string,
   id: string,
   price: number,
-  stars: number,
-  image: string
+  stars?: number,
+  image?: string
 }
 export const Item = ({ name, id, price, stars, image }: Item) => {
   return (
@@ -129,8 +129,8 @@ export const Inbox = ({count}: {count: number}) => {
   </a>
 }
 
-export const Like = ({item_id}: {item_id: string}) => {
-  return<button hx-post={'/item/like/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
+export const LikeButton = ({item_id}: {item_id: string}) => {
+  return <button hx-post={'/item/like/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
     <div class='m-4'>
       <HeartEmptyIcon/>
     </div>

@@ -1,4 +1,4 @@
-import { Dislike, Input, Like, Stars } from "./components";
+import { Dislike, Input, LikeButton, Stars } from "./components";
 import { SendIcon, XCircle } from "./Icons";
 
 export const ItemView = ({
@@ -43,7 +43,7 @@ export const ItemView = ({
                       </div>
                       { likes[0]
                         ? <Dislike id={likes[0].id} item_id={id}/>
-                        : <Like item_id={id}/>
+                        : <LikeButton item_id={id}/>
                       }
                   </div>
                   

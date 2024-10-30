@@ -4,12 +4,13 @@ import { cors } from "@elysiajs/cors";
 import { staticPlugin } from '@elysiajs/static'
 import { Layout } from './views/layout'
 import { userRoute } from "./controllers/user";
-import { db, prisma } from "./db";
 import { jwtConfig } from "./util/jwt";
 import { authRoute } from "./controllers/auth";
 import { chatRoute } from "./controllers/chat";
 import { ItemGrid, Search } from "./views/components";
 import { itemRoute } from "./controllers/item";
+import { Item } from "./models/item.model";
+import { User } from "./models/user.model";
 
 const app = new Elysia()
   .use(html())
@@ -27,8 +28,7 @@ const app = new Elysia()
     }
   })
   .get("/", async () => {
-
-    const items = await prisma.item.findMany()
+    const items = Item.getAll()
     return (
       <Layout>
         <>
@@ -39,18 +39,7 @@ const app = new Elysia()
     )
   })
   .post('/search', async ({ body: {search}}) => {
-    const items = await prisma.item.findMany({
-      where: {
-        OR: [
-          {
-            name: { contains: search }
-          },
-          {
-            description: { contains: search }
-          }
-        ]
-      }
-    })
+    const items = Item.search(search)
     return <ItemGrid items={items}/>
   }, {
     body: t.Object({
@@ -70,3 +59,5 @@ const app = new Elysia()
 console.log(
   `${process.env.PROJECT_NAME} is running at ${app.server?.hostname}:${app.server?.port}`
 );
+
+// console.log(User.create({name: '3', email: '3', password: '3'}));
