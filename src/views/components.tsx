@@ -56,7 +56,14 @@ export const Stars = ({num}: {num: number}) => {
   </div>
 }
 
-export const Item = ({ name, id, price, stars, image }: {name: string, id: string, price: number, stars: number, image: string}) => {
+interface Item {
+  name: string,
+  id: string,
+  price: number,
+  stars: number,
+  image: string
+}
+export const Item = ({ name, id, price, stars, image }: Item) => {
   return (
     <a  href={'/item/'+ id} class="w-full rounded-lg shadow bg-slate-800 transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-300">
         <div class="flex items-center justify-center rounded-t-lg w-full h-48 overflow-hidden">
@@ -78,6 +85,12 @@ export const Item = ({ name, id, price, stars, image }: {name: string, id: strin
     </a>
   )
 };
+
+export const ItemGrid = ({ items }: { items: Item[]}) => {
+  return <main id="search-results" class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-4 sm:mx-8 md:w-5/6 md:mx-auto'>
+    {items.map( item => <Item {...item}/> )}
+  </main>
+}
 
 export const Search = ({}) => {
   return(

@@ -1,5 +1,5 @@
 import Elysia, { t } from "elysia"
-import { db } from "../db";
+import { prisma as db } from "../db";
 import { Layout } from "../views/layout";
 import { ItemView } from "../views/item";
 import { Dislike, Item, Like, NotFound, ServerMessage } from "../views/components";

@@ -4,11 +4,11 @@ import { cors } from "@elysiajs/cors";
 import { staticPlugin } from '@elysiajs/static'
 import { Layout } from './views/layout'
 import { userRoute } from "./controllers/user";
-import { db, database } from "./db";
-import { jwtConfig } from "./jwt";
+import { db, prisma } from "./db";
+import { jwtConfig } from "./util/jwt";
 import { authRoute } from "./controllers/auth";
 import { chatRoute } from "./controllers/chat";
-import { Inbox, Item, Search } from "./views/components";
+import { ItemGrid, Search } from "./views/components";
 import { itemRoute } from "./controllers/item";
 
 const app = new Elysia()
@@ -28,34 +28,18 @@ const app = new Elysia()
   })
   .get("/", async () => {
 
-    const items = await db.item.findMany()
+    const items = await prisma.item.findMany()
     return (
       <Layout>
         <>
           <Search/>
-          <main id="search-results" class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-4 sm:mx-8 md:w-5/6 md:mx-auto'>
-            {items.map( item => <Item {...item}/> )}
-          </main>
+          <ItemGrid items={items}/>
         </>
       </Layout>
     )
   })
-  .get('/inbox', async ({ cookie: { user_id }, redirect}) => {
-
-    if (!user_id.value) {
-      return redirect('/auth/')
-    }
-    const unread = await db.read.count({
-      where: {
-        user_id: user_id.value,
-        value: false
-      }
-    })
-
-    return <Inbox count={unread}/>
-  })
   .post('/search', async ({ body: {search}}) => {
-    const result = await db.item.findMany({
+    const items = await prisma.item.findMany({
       where: {
         OR: [
           {
@@ -67,9 +51,7 @@ const app = new Elysia()
         ]
       }
     })
-    return <main id="search-results" class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-4 sm:mx-8 md:w-5/6 md:mx-auto'>
-      {result.map( item => <Item {...item}/> )}
-    </main>
+    return <ItemGrid items={items}/>
   }, {
     body: t.Object({
       search: t.String()

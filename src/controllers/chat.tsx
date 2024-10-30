@@ -1,11 +1,25 @@
 import Elysia, { t } from "elysia"
-import { db } from "../db";
+import { prisma as db } from "../db";
 import { ChatView, MessageBubble, MessageInput, MessageType } from "../views/chat";
 import Stream from "@elysiajs/stream";
-import { Emitter } from "../pubsub";
+import { Emitter } from "../util/pubsub";
+import { Inbox } from "../views/components";
 
 export const chatRoute = new Elysia({prefix: '/chat'})
   .decorate('emitter',  new Emitter<MessageType>())
+  .get('/inbox', async ({ cookie: { user_id }, redirect}) => {
+    if (!user_id.value) {
+      return redirect('/auth/')
+    }
+    const unread = await db.read.count({
+      where: {
+        user_id: user_id.value,
+        value: false
+      }
+    })
+
+    return <Inbox count={unread}/>
+  })
   .get('/', async ({ cookie: {user_id}}) => {
     const chats = await db.chat.findMany({ 
       where: {

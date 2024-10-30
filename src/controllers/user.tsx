@@ -1,18 +1,21 @@
 import Elysia from "elysia"
 import { UserView } from "../views/user";
-import { db } from "../db";
+import { User } from '../models/user.model'
 import { NotFound } from "../views/components";
 
 export const userRoute = new Elysia({prefix: '/user'})
   .get('/', async ({ cookie : { user_id }}) => {
-    const user = await db.user.findUnique({ where: { id: user_id.value }})
+
+    if (!user_id.value) return <NotFound/>
+
+    const user = User.getById(user_id.value)
     
-    if (!user)  return <NotFound/>
+    if (!user) return <NotFound/>
 
     return <UserView {...user}/>
   })
   .get('/:email', async ({params: { email }}) => {
-    const user = await db.user.findUnique({where: {email}})
+    const user = User.getByEmail(email)
     
     if (!user)  return <NotFound/>
 

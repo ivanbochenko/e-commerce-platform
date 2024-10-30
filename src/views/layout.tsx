@@ -44,7 +44,7 @@ export const Navbar = () => {
           <PlusIcon/>
           <h1>Add product</h1>
         </a>
-        <div hx-get='/inbox' hx-trigger='load once'>
+        <div hx-get='/chat/inbox' hx-trigger='load once'>
           <Inbox count={0}/>
         </div>
         <a href="/item/likes" class="flex items-center justify-center text-slate-300 size-10 bg-slate-600 hover:bg-slate-500 rounded-full">

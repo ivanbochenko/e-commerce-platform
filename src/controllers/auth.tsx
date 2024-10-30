@@ -1,9 +1,9 @@
 import Elysia, { t } from "elysia"
-import { db } from "../db";
 import { LoginView, ForgotPassView, RegisterView } from "../views/auth";
 import { ServerMessage } from "../views/components";
-import { jwtConfig } from "../jwt";
-import { sendEmail } from "../mail";
+import { jwtConfig } from "../util/jwt";
+import { sendEmail } from "../util/mail";
+import { User } from "../models/user.model";
 
 export const authRoute = new Elysia({prefix: '/auth'})
   .use(jwtConfig)
@@ -16,7 +16,7 @@ export const authRoute = new Elysia({prefix: '/auth'})
     return <LoginView/>
   })
   .post('/sign-in', async ({ set, body: { email, password }, jwt, cookie: { auth, user_id } }) => {
-    const user = await db.user.findUnique({ where: { email } })
+    const user = User.getByEmail(email)
     // await new Promise(res => setTimeout(res, 2000))
     
     if (!user) {
@@ -44,27 +44,25 @@ export const authRoute = new Elysia({prefix: '/auth'})
     })
   })
   .post('/register', async ({ set, body: { email, name, password, password2 }, jwt, cookie: { auth } }) => {
-    const exists = await db.user.count({ where: { email } }) > 0
-    if (exists) {
-      set.status = 401
-      return <ServerMessage text="User exists"/>
-    }
-
     if (password !== password2) {
       set.status = 401
       return <ServerMessage text="Passwords dont match"/>
     }
 
-    const user = await db.user.create({
-      data: {
-        email,
-        name,
-        password
-      }
+    const exists = User.getByEmail(email)
+    if (exists) {
+      set.status = 401
+      return <ServerMessage text="User exists"/>
+    }
+
+    const user = User.create({
+      email,
+      name,
+      password: await Bun.password.hash(password)
     })
     
     auth.set({
-      value: await jwt.sign({ id: user.id })
+      value: await jwt.sign({ id: user!.id })
     })
     
     return <ServerMessage success text={'Registered!'}/>
@@ -79,9 +77,9 @@ export const authRoute = new Elysia({prefix: '/auth'})
   .post('/restore', async ({ body: { email } }) => {
       const password = (Math.random() + 1).toString(36).substring(7)
       const hash = await Bun.password.hash(password)
-      const updatedUser = await db.user.update({
-        where: { email },
-        data: { password: hash }
+      const updatedUser = User.updateByEmail({
+        email,
+        password: hash
       })
       if (!updatedUser) {
         return <ServerMessage  success={false} text='User does not exist'/>
