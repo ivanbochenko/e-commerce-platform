@@ -1,5 +1,6 @@
-# Elysia with Bun runtime and HTMX powered e-commerce platform
-Features login, product creation and live chat
+# E-commerce platform featuring MVC pattern
+# Powered by Elysia, Bun runtime and HTMX 
+Features login, product creation, product like and live chat
 
 
 ## Development
