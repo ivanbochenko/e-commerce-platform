@@ -133,13 +133,12 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     }
   })
 
-  const read = await prisma.read.create({
-    data: {
-      message_id: message.id,
-      user_id: message.chat.item.user_id,
-    }
+  const read = Message.createRead({
+    message_id: message.id,
+    user_id: message.chat.item.user_id,
   })
-  return <div class='flex justify-center items-center'>{chatFromDB ? 'Sent' : 'Chat created'}</div>
+  
+  return <div class='flex justify-center items-center'>Sent</div>
 },{
   body: t.Object({
     text: t.String()
@@ -175,12 +174,10 @@ export const chatRoute = new Elysia({prefix: '/chat'})
 
   const buyer_id = message.chat.user_id
   const seller_id = message.chat.item.user_id
-
-  const read = await prisma.read.create({
-    data: {
-      message_id: message.id,
-      user_id: author_id == buyer_id ? seller_id : buyer_id,
-    }
+  
+  const read = Message.createRead({
+    message_id: message.id,
+    user_id: author_id == buyer_id ? seller_id : buyer_id,
   })
 
   emitter.emit(chat_id, message)
