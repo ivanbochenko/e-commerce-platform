@@ -8,15 +8,15 @@ export const ItemView = ({
   description, 
   price, 
   stars,
-  likes
+  like_id
 }: { 
   id: string, 
   name: string, 
   image: string, 
-  description: string | null, 
+  description?: string, 
   price: number, 
-  stars: number,
-  likes: { id: string }[]
+  stars?: number,
+  like_id: string | null
 }) => {
   return <section class="py-8">
   <div class="mx-auto max-w-7xl px-8">
@@ -38,11 +38,11 @@ export const ItemView = ({
                             {name}
                           </h2>
                           <h5 class="font-manrope font-semibold text-2xl leading-9 text-slate-300 ">$ {price} </h5>
-                          <Stars num={stars}/>
-                          <p class="font-normal text-xl text-slate-300">{description}</p>
+                          <Stars num={stars ?? 0}/>
+                          <p class="font-normal text-xl text-slate-300">{description ?? ''}</p>
                       </div>
-                      { likes[0]
-                        ? <Dislike id={likes[0].id} item_id={id}/>
+                      { like_id
+                        ? <Dislike id={like_id} item_id={id}/>
                         : <LikeButton item_id={id}/>
                       }
                   </div>

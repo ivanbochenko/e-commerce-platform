@@ -57,11 +57,11 @@ export const Stars = ({num = 0}: {num?: number}) => {
 }
 
 interface Item {
-  name: string,
   id: string,
+  name: string,
   price: number,
+  image: string
   stars?: number,
-  image?: string
 }
 export const Item = ({ name, id, price, stars, image }: Item) => {
   return (

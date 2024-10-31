@@ -11,6 +11,7 @@ import { ItemGrid, Search } from "./views/components";
 import { itemRoute } from "./controllers/item";
 import { Item } from "./models/item.model";
 import { User } from "./models/user.model";
+import { Like } from "./models/like.model";
 
 const app = new Elysia()
   .use(html())
@@ -60,4 +61,4 @@ console.log(
   `${process.env.PROJECT_NAME} is running at ${app.server?.hostname}:${app.server?.port}`
 );
 
-// console.log(User.create({name: '3', email: '3', password: '3'}));
+// console.log(Item.getById('80531e2a-15b9-42f7-81bd-636fc12da759'));

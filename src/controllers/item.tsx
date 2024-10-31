@@ -1,5 +1,4 @@
 import Elysia, { t } from "elysia"
-import { prisma } from "../db";
 import { Layout } from "../views/layout";
 import { ItemView } from "../views/item";
 import { Dislike, ItemGrid, LikeButton, NotFound, ServerMessage } from "../views/components";
@@ -13,24 +12,27 @@ export const itemRoute = new Elysia({prefix: '/item'})
       <NewItem/>
     </Layout>
   })
-  .get('/:id', async ({params: { id }, cookie: { user_id }}) => {
-    const item = await prisma.item.findUnique({
-      where: { id },
-      include: {
-        likes: {
-          where: { user_id: user_id.value }
-        }
-      }
-    })
+  .get('/:id', async ({params: { id }, cookie: { user_id }, redirect}) => {
+    if (!user_id.value) {
+      return redirect('/auth')
+    }
+    const item = Item.getById(id)
+    const like = Like.getByUserIdAndItemId({item_id: id, user_id: user_id.value})
     
     if (!item) return <NotFound/>
     
     return <Layout>
-      <ItemView {...item}/>
+      <ItemView {...item } like_id={like?.id ?? null}/>
     </Layout>
   })
-  .post('/add', async ({ body: { name, price, image, description }, cookie: {user_id} }) => {
-    const item = Item.create({ name, image, description, price: +price, user_id: user_id.value!})
+  .post('/add', async ({ body: { name, price, image, description }, cookie: {user_id}, redirect }) => {
+    if (!user_id.value) {
+      return redirect('/auth')
+    }
+    const item = Item.create({ name, image, description, price: +price, user_id: user_id.value})
+    if (!item) {
+      return <ServerMessage text="Error"/>
+    }
     return <ServerMessage success text="Created"/>
   }, {
     body: t.Object({
@@ -49,18 +51,15 @@ export const itemRoute = new Elysia({prefix: '/item'})
   
   // Like API
 
-  .get('/likes', async ({ cookie: {user_id} }) => {
-    const likes = await prisma.like.findMany({
-      where: {
-        user_id: user_id.value
-      },
-      include: {
-        item: true
-      }
-    })
-    const items = likes.map( l => l.item )
+  .get('/likes', async ({ cookie: {user_id}, redirect }) => {
+    if (!user_id.value) {
+      return redirect('/auth')
+    }
+    const likes = Like.getAllItemsByUserId(user_id.value)
+    
+    const items = likes.map( l => l )
     return <Layout>
-      <ItemGrid items={items}/>
+      <ItemGrid items={likes}/>
     </Layout>
   })
   .post('/like/:item_id', async ({ params: { item_id}, cookie: {user_id}, redirect}) => {
