@@ -1,9 +1,10 @@
 import Elysia, { t } from "elysia"
-import { prisma as db } from "../db";
+import { prisma } from "../db";
 import { ChatView, MessageBubble, MessageInput, MessageType } from "../views/chat";
 import Stream from "@elysiajs/stream";
 import { Emitter } from "../util/pubsub";
 import { Inbox } from "../views/components";
+import { Message } from "../models/message.model";
 
 export const chatRoute = new Elysia({prefix: '/chat'})
   .decorate('emitter',  new Emitter<MessageType>())
@@ -11,17 +12,12 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     if (!user_id.value) {
       return redirect('/auth/')
     }
-    const unread = await db.read.count({
-      where: {
-        user_id: user_id.value,
-        value: false
-      }
-    })
+    const unread = Message.inboxCountByUserId(user_id.value)
 
     return <Inbox count={unread}/>
   })
   .get('/', async ({ cookie: {user_id}}) => {
-    const chats = await db.chat.findMany({ 
+    const chats = await prisma.chat.findMany({ 
       where: {
         OR: [
           { user_id: user_id.value },
@@ -41,7 +37,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     return <ChatView chatList={chats}/>
   })
   .get('/:chat_id', async ({ cookie: {user_id}, params: { chat_id }}) => {
-    const chat = await db.chat.findUnique({
+    const chat = await prisma.chat.findUnique({
       where: {
         id: chat_id
       },
@@ -58,7 +54,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
       }
     })
 
-    const read = await db.read.updateMany({
+    const read = await prisma.read.updateMany({
       where: {
         user_id: user_id.value,
         message: {
@@ -103,7 +99,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     return redirect('/auth')
   }
   var chat
-  const chatFromDB = await db.chat.findFirst({
+  const chatFromDB = await prisma.chat.findFirst({
     where: {
       item_id,
       user_id: user_id.value
@@ -112,14 +108,14 @@ export const chatRoute = new Elysia({prefix: '/chat'})
   if (chatFromDB) {
     chat = chatFromDB
   } else {
-    chat = await db.chat.create({
+    chat = await prisma.chat.create({
       data: {
         item_id,
         user_id: user_id.value
       }
     })
   }
-  const message = await db.message.create({
+  const message = await prisma.message.create({
     data: {
       text,
       author_id: user_id.value,
@@ -137,7 +133,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     }
   })
 
-  const read = await db.read.create({
+  const read = await prisma.read.create({
     data: {
       message_id: message.id,
       user_id: message.chat.item.user_id,
@@ -154,7 +150,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
   if (!author_id) {
     return redirect('/auth')
   }
-  const message = await db.message.create({
+  const message = await prisma.message.create({
     data: {
       text,
       author_id,
@@ -180,7 +176,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
   const buyer_id = message.chat.user_id
   const seller_id = message.chat.item.user_id
 
-  const read = await db.read.create({
+  const read = await prisma.read.create({
     data: {
       message_id: message.id,
       user_id: author_id == buyer_id ? seller_id : buyer_id,
@@ -226,7 +222,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
 //   async message(ws, { text }) {
 //     const author_id = ws.data.cookie.user_id.value
 //     const chat_id = ws.data.params.chat_id
-//     const message = await db.message.create({
+//     const message = await prisma.message.create({
 //       data: {
 //         text,
 //         author_id,

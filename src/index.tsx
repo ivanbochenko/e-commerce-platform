@@ -61,4 +61,4 @@ console.log(
   `${process.env.PROJECT_NAME} is running at ${app.server?.hostname}:${app.server?.port}`
 );
 
-// console.log(Item.getById('80531e2a-15b9-42f7-81bd-636fc12da759'));
+// console.log(Message.inboxCountByUserId('1'));
