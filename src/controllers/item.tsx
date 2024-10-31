@@ -1,7 +1,7 @@
 import Elysia, { t } from "elysia"
 import { Layout } from "../views/layout";
 import { ItemView } from "../views/item";
-import { Dislike, ItemGrid, LikeButton, NotFound, ServerMessage } from "../views/components";
+import { ItemGrid, NotFound, ServerMessage } from "../views/components";
 import { NewItem } from "../views/new_item";
 import { Item } from "../models/item.model";
 import { Like } from "../models/like.model";
@@ -47,32 +47,4 @@ export const itemRoute = new Elysia({prefix: '/item'})
     return <Layout>
       <ItemGrid items={items}/>
     </Layout>
-  })
-  
-  // Like API
-
-  .get('/likes', async ({ cookie: {user_id}, redirect }) => {
-    if (!user_id.value) {
-      return redirect('/auth')
-    }
-    const likes = Like.getAllItemsByUserId(user_id.value)
-    
-    const items = likes.map( l => l )
-    return <Layout>
-      <ItemGrid items={likes}/>
-    </Layout>
-  })
-  .post('/like/:item_id', async ({ params: { item_id}, cookie: {user_id}, redirect}) => {
-    if (!user_id.value) {
-      return redirect('/auth')
-    }
-    const like = Like.create({
-      user_id: user_id.value,
-      item_id
-    })
-    return <Dislike id={like!.id} item_id={item_id}/>
-  })
-  .post('/dislike/:id/:item_id', async ({ params: { id, item_id }}) => {
-    const like = Like.deleteById(id)
-    return <LikeButton item_id={item_id}/>
   })

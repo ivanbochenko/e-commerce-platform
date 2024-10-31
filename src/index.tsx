@@ -10,8 +10,7 @@ import { chatRoute } from "./controllers/chat";
 import { ItemGrid, Search } from "./views/components";
 import { itemRoute } from "./controllers/item";
 import { Item } from "./models/item.model";
-import { User } from "./models/user.model";
-import { Like } from "./models/like.model";
+import { likeRoute } from "./controllers/like";
 
 const app = new Elysia()
   .use(html())
@@ -50,6 +49,7 @@ const app = new Elysia()
   .use(authRoute)
   .use(userRoute)
   .use(itemRoute)
+  .use(likeRoute)
   .use(chatRoute)
   .onRequest(({ request }) => {
       console.log(`Request received: ${request.method}: ${request.url}`)

@@ -130,7 +130,7 @@ export const Inbox = ({count}: {count: number}) => {
 }
 
 export const LikeButton = ({item_id}: {item_id: string}) => {
-  return <button hx-post={'/item/like/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
+  return <button hx-post={'/like/create/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
     <div class='m-4'>
       <HeartEmptyIcon/>
     </div>
@@ -138,7 +138,7 @@ export const LikeButton = ({item_id}: {item_id: string}) => {
 }
 
 export const Dislike = ({id, item_id}: {id:string, item_id: string}) => {
-  return <button hx-post={'/item/dislike/' + id + '/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
+  return <button hx-post={'/like/remove/' + id + '/' + item_id} hx-swap='outerHTML' class="text-slate-300 bg-slate-800 hover:bg-slate-700  transition-all duration-500 rounded-full items-center">
   
     <div class='m-4'>
       <HeartFullIcon/>

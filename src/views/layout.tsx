@@ -47,7 +47,7 @@ export const Navbar = () => {
         <div hx-get='/chat/inbox' hx-trigger='load once'>
           <Inbox count={0}/>
         </div>
-        <a href="/item/likes" class="flex items-center justify-center text-slate-300 size-10 bg-slate-600 hover:bg-slate-500 rounded-full">
+        <a href="/like" class="flex items-center justify-center text-slate-300 size-10 bg-slate-600 hover:bg-slate-500 rounded-full">
           <HeartFullIcon/>
         </a>
         <a href="/user" class="relative size-10 overflow-hidden bg-slate-600 hover:bg-slate-500 rounded-full">
