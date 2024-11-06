@@ -11,7 +11,9 @@ export const likeRoute = new Elysia({prefix: '/like'})
   .get('/', async ({ user_id }) => {
     const likes = Like.getAllItemsByUserId(user_id)
     return <Layout>
-      <ItemGrid items={likes}/>
+      <div class='mt-4'>
+        <ItemGrid items={likes}/>
+      </div>
     </Layout>
   })
   .get('/status/:item_id', async ({ params: { item_id }, user_id}) => {

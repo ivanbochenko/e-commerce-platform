@@ -31,7 +31,8 @@ export class Item {
   }
 
   static create(data: Omit<Item, 'id'>) {
-    const result = db.query<Item, Record<string, string | number>>(`INSERT INTO user
+    const result = db.query<Item, Record<string, string | number>>(`
+      INSERT INTO user
       (id, name, email, password)
       VALUES ($id, $name, $email, $password)
       RETURNING *`

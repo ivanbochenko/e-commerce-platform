@@ -4,7 +4,6 @@ import { ItemView } from "../views/item";
 import { ItemGrid, NotFound, Search, ServerMessage } from "../views/components";
 import { NewItem } from "../views/new_item";
 import { Item } from "../models/item.model";
-import { Like } from "../models/like.model";
 import { userService } from "../util/signed";
 
 export const itemRoute = new Elysia({prefix: '/item'})

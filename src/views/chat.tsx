@@ -6,7 +6,7 @@ export const ChatView = ({chats}: {chats: {id: string, name: string}[]}) => {
   return <Layout fix_h>
     <div class='flex flex-row grow mt-4 h-3/4 md:w-2/3 md:mx-auto bg-slate-800 rounded-xl p-4'>
       <div class="flex flex-col h-full space-y-2 me-2 divide-y-2 divide-slate-600 font-medium">
-        {chats?.map(i =>
+        {chats.map(i =>
           <button
             hx-get={"/chat/" + i.id}
             hx-target='#chatPlaceholder'
@@ -41,7 +41,10 @@ export const MessageInput = ({chat_id}: {chat_id: string}) => {
   </form>
 }
 
-export const MessageBubble = ({ name, time, text, read }: MessageType ) => {
+export const MessageBubble = ({ name, time, text, read }: MessageType ) => {  
+  const clock = time.split(' ')[1].split(':')
+  const date = clock[0]+':'+clock[1]
+  
   return <div class="flex items-start ms-4 my-2 gap-2">
     <UserIcon size={8}/>
     <div class="flex flex-col gap-1 w-full">
@@ -49,7 +52,7 @@ export const MessageBubble = ({ name, time, text, read }: MessageType ) => {
         <div class="flex flex-col me-auto leading-2 p-2 bg-slate-700 rounded-e-xl rounded-es-xl">
           <p class="text-sm font-normal text-slate-100">{text}</p>
           <span class="text-sm font-normal text-slate-400">
-            {time.getHours()}:{(time.getMinutes() < 10 ? '0' : '') + time.getMinutes()}
+            {date}
           </span>
         </div>
         <span class="text-sm font-normal text-slate-400">{ read == 0 ? 'unread' : 'read' }</span>
@@ -60,6 +63,6 @@ export const MessageBubble = ({ name, time, text, read }: MessageType ) => {
 export type MessageType = {
   name?: string,
   read: number,
-  time: Date,
+  time: string,
   text: string
 }

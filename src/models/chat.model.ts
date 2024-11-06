@@ -12,8 +12,8 @@ export class Chat {
       INSERT INTO chat
       (id, user_id, seller_id)
       VALUES ($id, $user_id, $seller_id)
-      RETURNING *`
-    ).get({...data, id: crypto.randomUUID()})
+      RETURNING *;
+    `).get({...data, id: crypto.randomUUID()})
 
     return result
   }
@@ -31,6 +31,15 @@ export class Chat {
       FROM chat
       JOIN user ON chat.seller_id = user.id
       WHERE chat.user_id = ?
+    `).all(id)
+    return res
+  }
+  static getAllBySellerId(id: string) {
+    const res = db.query<{id: string, name: string}, string>(`
+      SELECT chat.id AS id, user.name AS name
+      FROM chat
+      JOIN user ON chat.user_id = user.id
+      WHERE chat.seller_id = ?
     `).all(id)
     return res
   }

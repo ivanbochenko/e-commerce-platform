@@ -2,7 +2,7 @@ import { db } from '../db';
 
 export interface Message {
   id: string,
-  time: Date,
+  time: string,
   text: string,
   read: number,
   user_id: string,
@@ -40,18 +40,18 @@ export class Message {
       UPDATE message
       SET read = 1
       WHERE chat_id = $chat_id AND user_id != $user_id
-    `).get(data)
+    `).all(data)
     return res
   }
   
   static inboxCount(id: string) {
-    const res = db.query<{value: number}, string>(`
+    const res = db.query<{value: number}, {id: string}>(`
       SELECT COUNT(*) as value
       FROM message
       JOIN chat ON message.chat_id = chat.id
-      WHERE (chat.user_id = ? OR chat.seller_id = ?)
-      AND message.read = 0 AND message.user_id != ?
-    `).get(id)
+      WHERE (chat.user_id = $id OR chat.seller_id = $id)
+      AND message.read = 0 AND message.user_id != $id
+    `).get({id})
     return res?.value ?? 0
   }
 }

@@ -1,15 +1,17 @@
-import { Dislike, Input, LikeButton, Stars } from "./components";
+import { Input, Stars } from "./components";
 import { SendIcon, XCircle } from "./Icons";
 
 export const ItemView = ({
-  id, 
+  id,
+  user_id,
   name, 
   image, 
   description, 
   price, 
   stars,
 }: { 
-  id: string, 
+  id: string,
+  user_id: string,
   name: string, 
   image: string, 
   price: number,
@@ -40,7 +42,7 @@ export const ItemView = ({
                           <p class="font-normal text-xl text-slate-300">{description ?? ''}</p>
                       </div>
                       <div hx-get={'/like/status/' + id} hx-trigger='load once'>
-                        <LikeButton item_id="1"/>
+                        <div class="bg-slate-800 rounded-full m-4"/>
                       </div>
                   </div>
                   
@@ -55,7 +57,7 @@ export const ItemView = ({
                     <button class='absolute -right-4 -top-4' onclick="document.querySelector('details').removeAttribute('open')">
                       <XCircle/>
                     </button>
-                    <form hx-post={'/chat/new/' + id} class='relative w-full'>
+                    <form hx-post={'/chat/new/' + user_id} class='relative w-full'>
                       
                       <Input name="text" placeholder="Message..."/>
                       <button type="submit" class="flex absolute inset-y-0 end-2 mt-9">
