@@ -1,72 +1,27 @@
 import Elysia, { t } from "elysia"
-import { prisma } from "../db";
 import { ChatView, MessageBubble, MessageInput, MessageType } from "../views/chat";
 import Stream from "@elysiajs/stream";
 import { Emitter } from "../util/pubsub";
-import { Inbox } from "../views/components";
+import { Inbox, ServerMessage } from "../views/components";
 import { Message } from "../models/message.model";
+import { Chat } from "../models/chat.model";
+import { userService } from "../util/signed";
 
 export const chatRoute = new Elysia({prefix: '/chat'})
-  .decorate('emitter',  new Emitter<MessageType>())
-  .get('/inbox', async ({ cookie: { user_id }, redirect}) => {
-    if (!user_id.value) {
-      return redirect('/auth/')
-    }
-    const unread = Message.inboxCountByUserId(user_id.value)
-
-    return <Inbox count={unread}/>
+  .decorate('emitter', new Emitter<MessageType>())
+  .use(userService)
+  .get('/inbox', async ({ user_id }) => {
+    const inboxCount = Message.inboxCount(user_id)
+    return <Inbox count={inboxCount}/>
   })
-  .get('/', async ({ cookie: {user_id}}) => {
-    const chats = await prisma.chat.findMany({ 
-      where: {
-        OR: [
-          { user_id: user_id.value },
-          { item: { user_id: user_id.value } }
-        ]
-      },
-      select: {
-        id: true,
-        item: {
-          select: {
-            name: true
-          }
-        }
-      }
-    })
-
-    return <ChatView chatList={chats}/>
+  .get('/', async ({ user_id }) => {
+    const chats = Chat.getAllByUserId(user_id)
+    return <ChatView chats={chats}/>
   })
-  .get('/:chat_id', async ({ cookie: {user_id}, params: { chat_id }}) => {
-    const chat = await prisma.chat.findUnique({
-      where: {
-        id: chat_id
-      },
-      select: {
-        id: true,
-        item: true,
-        messages: {
-          include: {
-            author: true,
-            read: true
-          },
-          orderBy: { time: 'desc' }
-        },
-      }
-    })
+  .get('/:chat_id', async ({ user_id, params: { chat_id }}) => {
+    const messages = Message.getAllByChatId(chat_id)
 
-    const read = await prisma.read.updateMany({
-      where: {
-        user_id: user_id.value,
-        message: {
-          chat_id
-        }
-      },
-      data: {
-        value: true
-      }
-    })
-
-    if (!chat) return <h1>No messages!</h1>
+    const read = Message.readMessages({chat_id, user_id})
 
     return (
       <div
@@ -74,9 +29,9 @@ export const chatRoute = new Elysia({prefix: '/chat'})
         // hx-trigger="load delay:2s"
         class="flex flex-col grow w-full h-full justify-between"
       >
-        <a href={"/item/" + chat.item.id} class='flex justify-center relative'>
+        {/* <a href={"/item/" + chat.item.id} class='flex justify-center relative'>
           <h1 class="absolute top-2 text-xl font-bold text-slate-300">{ chat.item.name }</h1>
-        </a>
+        </a> */}
         <div class='flex flex-col-reverse flex-auto h-full overflow-auto'>
           <div 
             hx-ext="sse"
@@ -85,159 +40,58 @@ export const chatRoute = new Elysia({prefix: '/chat'})
             hx-swap="beforeend"
             hx-on-after-settle="this.scrollTo(0, this.scrollHeight);"
           />
-          {chat.messages.map( m => <MessageBubble {...m}/>)}
+          {messages.map( m => <MessageBubble {...m}/>)}
         </div>
         
         <div class='px-4 pb-4'>
-          <MessageInput chat_id={chat.id}/>
+          <MessageInput chat_id={chat_id}/>
         </div>
       </div>
     )
   })
-.post('/new/:item_id', async ({ body: { text }, params: { item_id }, cookie: { user_id }, redirect }) => {
-  if (!user_id.value) {
-    return redirect('/auth')
-  }
-  var chat
-  const chatFromDB = await prisma.chat.findFirst({
-    where: {
-      item_id,
-      user_id: user_id.value
+  .post('/new/:seller_id', async ({ body: { text }, params: { seller_id }, user_id }) => {
+    var chat
+    const chatFromDB = Chat.getByUserIds({ user_id, seller_id })
+    if (chatFromDB) {
+      chat = chatFromDB
+    } else {
+      chat = Chat.create({ user_id, seller_id })
     }
+    const message = Message.create({
+      text,
+      user_id: user_id,
+      chat_id: chat!.id
+    })
+    if (!message) {
+      return <ServerMessage text="Error"/>
+    }
+    
+    return <div class='flex justify-center items-center'>Sent</div>
+  }, {
+    body: t.Object({
+      text: t.String()
+    })
   })
-  if (chatFromDB) {
-    chat = chatFromDB
-  } else {
-    chat = await prisma.chat.create({
-      data: {
-        item_id,
-        user_id: user_id.value
-      }
+  .post('/message/:chat_id', async ({ body: { text }, user_id, params: {chat_id}, emitter }) => {
+    const message = Message.create({text, user_id, chat_id})
+    if (message) {
+      emitter.emit(chat_id, message)
+      return 'Success'
+    }
+  }, {
+    body: t.Object({
+      text: t.String()
     })
   }
-  const message = await prisma.message.create({
-    data: {
-      text,
-      author_id: user_id.value,
-      chat_id: chat.id
-    },
-    select: {
-      id: true,
-      chat: {
-        select: {
-          item: {
-            select: { user_id: true }
-          }
-        }
-      }
-    }
-  })
-
-  const read = Message.createRead({
-    message_id: message.id,
-    user_id: message.chat.item.user_id,
-  })
-  
-  return <div class='flex justify-center items-center'>Sent</div>
-},{
-  body: t.Object({
-    text: t.String()
-  })
-})
-.post('/message/:chat_id', async ({ body: { text }, cookie: { user_id }, params: {chat_id}, redirect, emitter }) => {
-  const author_id = user_id.value
-  if (!author_id) {
-    return redirect('/auth')
-  }
-  const message = await prisma.message.create({
-    data: {
-      text,
-      author_id,
-      chat_id
-    },
-    select: {
-      id: true,
-      text: true,
-      time: true,
-      author: true,
-      read: { select: { value: true }},
-      chat: {
-        select: {
-          user_id: true,
-          item: {
-            select: { user_id: true }
-          }
-        }
-      }
-    }
-  })
-
-  const buyer_id = message.chat.user_id
-  const seller_id = message.chat.item.user_id
-  
-  const read = Message.createRead({
-    message_id: message.id,
-    user_id: author_id == buyer_id ? seller_id : buyer_id,
-  })
-
-  emitter.emit(chat_id, message)
-
-  return 'Success'
-},{
-  body: t.Object({
-    text: t.String()
-  })
-}
-)
-.get('/stream/:chat_id', ({ params: {chat_id}, emitter }) =>
-  new Stream(stream => {
-    const sub = emitter.subscribe(chat_id, m => {
-      stream.send(<MessageBubble {...m}/>)
+  )
+  .get('/stream/:chat_id', ({ params: {chat_id}, emitter }) =>
+    new Stream(stream => {
+      const sub = emitter.subscribe(chat_id, m => {
+        stream.send(<MessageBubble {...m}/>)
+      })
+      // setTimeout(() => {
+      //   sub.unsubscribe()
+      //   stream.close()
+      // }, 5*60*1000)
     })
-    // setTimeout(() => {
-    //   sub.unsubscribe()
-    //   stream.close()
-    // }, 5*60*1000)
-  })
-)
-
-
-
-
-
-
-// .ws('/:chat_id', {
-//   body: t.Object({
-//     text: t.String(),
-//   }),
-//   cookie: t.Cookie({
-//     user_id: t.String()
-//   }),
-//   open(ws) {
-//     ws.subscribe(ws.data.params.chat_id)
-//   },
-//   async message(ws, { text }) {
-//     const author_id = ws.data.cookie.user_id.value
-//     const chat_id = ws.data.params.chat_id
-//     const message = await prisma.message.create({
-//       data: {
-//         text,
-//         author_id,
-//         chat_id
-//       },
-//       include: {
-//         read: true,
-//         author: {
-//           select: {
-//             id: true,
-//             name: true,
-//           }
-//         }
-//       }
-//     })
-//     ws.publish(chat_id, message)
-//   },
-//   close(ws) {
-//     ws.unsubscribe(ws.data.params.chat_id)
-//   },
-// })
+  )

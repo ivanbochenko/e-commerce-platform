@@ -2,11 +2,11 @@ import { HomeButton } from "./components"
 import { EnvelopeIcon, SendIcon, UserIcon } from "./Icons"
 import { Layout } from "./layout"
 
-export const ChatView = ({chatList}: {chatList: {id: string, item: {name: string}}[], selling?: boolean}) => {
+export const ChatView = ({chats}: {chats: {id: string, name: string}[]}) => {
   return <Layout fix_h>
     <div class='flex flex-row grow mt-4 h-3/4 md:w-2/3 md:mx-auto bg-slate-800 rounded-xl p-4'>
       <div class="flex flex-col h-full space-y-2 me-2 divide-y-2 divide-slate-600 font-medium">
-        {chatList.map(i =>
+        {chats.map(i =>
           <button
             hx-get={"/chat/" + i.id}
             hx-target='#chatPlaceholder'
@@ -14,7 +14,7 @@ export const ChatView = ({chatList}: {chatList: {id: string, item: {name: string
             class="flex w-full items-center p-2 space-x-2 text-slate-100"
           >
             <EnvelopeIcon/>
-            <p>{i.item.name}</p>
+            <p>{i.name}</p>
           </button>
         )}
       </div>
@@ -41,25 +41,25 @@ export const MessageInput = ({chat_id}: {chat_id: string}) => {
   </form>
 }
 
-export const MessageBubble = ({ author, time, text, read }: MessageType ) => {
+export const MessageBubble = ({ name, time, text, read }: MessageType ) => {
   return <div class="flex items-start ms-4 my-2 gap-2">
     <UserIcon size={8}/>
     <div class="flex flex-col gap-1 w-full">
-        <span class="text-sm font-semibold text-slate-100">{author.name}</span>
+        <span class="text-sm font-semibold text-slate-100">{name}</span>
         <div class="flex flex-col me-auto leading-2 p-2 bg-slate-700 rounded-e-xl rounded-es-xl">
           <p class="text-sm font-normal text-slate-100">{text}</p>
           <span class="text-sm font-normal text-slate-400">
             {time.getHours()}:{(time.getMinutes() < 10 ? '0' : '') + time.getMinutes()}
           </span>
         </div>
-        <span class="text-sm font-normal text-slate-400">{ read?.value === false ? 'unread' : 'read' }</span>
+        <span class="text-sm font-normal text-slate-400">{ read == 0 ? 'unread' : 'read' }</span>
     </div>
   </div>
 }
 
 export type MessageType = {
-  author: { id: string, name: string },
-  read: { value: boolean } | null,
+  name?: string,
+  read: number,
   time: Date,
   text: string
 }

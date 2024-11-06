@@ -2,13 +2,13 @@ import Elysia from "elysia"
 import { UserView } from "../views/user";
 import { User } from '../models/user.model'
 import { NotFound } from "../views/components";
+import { userService } from "../util/signed";
 
 export const userRoute = new Elysia({prefix: '/user'})
-  .get('/', async ({ cookie : { user_id }}) => {
+  .use(userService)
+  .get('/', async ({ user_id }) => {
 
-    if (!user_id.value) return <NotFound/>
-
-    const user = User.getById(user_id.value)
+    const user = User.getById(user_id)
     
     if (!user) return <NotFound/>
 

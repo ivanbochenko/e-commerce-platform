@@ -6,16 +6,31 @@ import { sendEmail } from "../util/mail";
 import { User } from "../models/user.model";
 
 export const authRoute = new Elysia({prefix: '/auth'})
+  .model({
+    signIn: t.Object({
+      email: t.String(),
+      password: t.String()
+    }),
+    register: t.Object({
+      email: t.String(),
+      name: t.String(),
+      password: t.String(),
+      password2: t.String()
+    }),
+    restore: t.Object({
+      email: t.String()
+    })
+  })
   .use(jwtConfig)
   .get('/', ({ }) => <LoginView/>)
   .get('/sign-up', () => <RegisterView/>)
   .get('/forgot-password', () => <ForgotPassView/>)
-  .get('/sign-out', async ({cookie: { auth, user_id }}) => {
-    auth.remove()
+  .get('/sign-out', async ({cookie: { token, user_id }}) => {
+    token.remove()
     user_id.remove()
     return <LoginView/>
   })
-  .post('/sign-in', async ({ set, body: { email, password }, jwt, cookie: { auth, user_id } }) => {
+  .post('/sign-in', async ({ set, body: { email, password }, jwt, cookie: { token, user_id } }) => {
     const user = User.getByEmail(email)
     // await new Promise(res => setTimeout(res, 2000))
     
@@ -31,19 +46,16 @@ export const authRoute = new Elysia({prefix: '/auth'})
       return <ServerMessage text="Wrong password"/>
     }
     
-    auth.set({
+    token.set({
       value: await jwt.sign({ id: user.id })
     })
     
     user_id.set({ value: user.id })
     return <ServerMessage success text={'Signed!'}/>
   }, {
-    body: t.Object({
-      email: t.String(),
-      password: t.String()
-    })
+    body: 'signIn'
   })
-  .post('/register', async ({ set, body: { email, name, password, password2 }, jwt, cookie: { auth } }) => {
+  .post('/register', async ({ set, body: { email, name, password, password2 }, jwt, cookie: { token } }) => {
     if (password !== password2) {
       set.status = 401
       return <ServerMessage text="Passwords dont match"/>
@@ -61,18 +73,13 @@ export const authRoute = new Elysia({prefix: '/auth'})
       password: await Bun.password.hash(password)
     })
     
-    auth.set({
+    token.set({
       value: await jwt.sign({ id: user!.id })
     })
     
     return <ServerMessage success text={'Registered!'}/>
   }, {
-    body: t.Object({
-      email: t.String(),
-      name: t.String(),
-      password: t.String(),
-      password2: t.String()
-    })
+    body: 'register'
   })
   .post('/restore', async ({ body: { email } }) => {
       const password = (Math.random() + 1).toString(36).substring(7)
@@ -88,8 +95,6 @@ export const authRoute = new Elysia({prefix: '/auth'})
       return <ServerMessage success text='Check email'/>
     },
     {
-      body: t.Object({
-        email: t.String()
-      })
+      body: 'restore'
     }
   )

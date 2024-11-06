@@ -40,7 +40,7 @@ export const Navbar = () => {
     <nav class="relative flex items-center justify-between bg-slate-800 p-4">
       <a href="/" class="text-xl font-semibold text-sky-300">{process.env.PROJECT_NAME}</a>
       <div class='flex space-x-4'>
-        <a href="/item/" class='flex flex-row items-center p-2 space-x-2 cursor-pointer bg-slate-600 hover:bg-slate-500 rounded-lg text-slate-300'>
+        <a href="/item/new" class='flex flex-row items-center p-2 space-x-2 cursor-pointer bg-slate-600 hover:bg-slate-500 rounded-lg text-slate-300'>
           <PlusIcon/>
           <h1>Add product</h1>
         </a>

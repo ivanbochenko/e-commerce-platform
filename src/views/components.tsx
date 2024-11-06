@@ -32,7 +32,7 @@ export const Spinner = () => <span class="htmx-indicator">
 export const Button = ({message}: {message?: string}) => {
   return <button type="submit" class="w-full text-slate-300 bg-slate-700 font-medium rounded-lg p-2 text-center">
       {message}
-      <Spinner/>
+      {/* <Spinner/> */}
     </button>
 }
 
@@ -103,7 +103,7 @@ export const Search = ({}) => {
           type="search" 
           name="search"
           placeholder="Search..." 
-          hx-post="/search" 
+          hx-post="/item/search" 
           hx-trigger="input changed delay:500ms, search" 
           hx-target="#search-results" 
           hx-swap='outerHTML'

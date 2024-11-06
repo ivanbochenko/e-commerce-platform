@@ -12,14 +12,12 @@
     "@elysiajs/jwt": "^1.1.0",
     "@elysiajs/static": "^1.1.0",
     "@elysiajs/stream": "^1.1.0",
-    "@prisma/client": "^5.18.0",
     "elysia": "^1.1.11",
     "nodemailer": "^6.9.14"
   },
   "devDependencies": {
     "@types/nodemailer": "^6.4.15",
-    "bun-types": "^1.1.24",
-    "prisma": "^5.18.0"
+    "bun-types": "^1.1.24"
   },
   "module": "src/index.js",
   "bun-create": {

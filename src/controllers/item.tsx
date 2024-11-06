@@ -1,23 +1,41 @@
 import Elysia, { t } from "elysia"
 import { Layout } from "../views/layout";
 import { ItemView } from "../views/item";
-import { ItemGrid, NotFound, ServerMessage } from "../views/components";
+import { ItemGrid, NotFound, Search, ServerMessage } from "../views/components";
 import { NewItem } from "../views/new_item";
 import { Item } from "../models/item.model";
 import { Like } from "../models/like.model";
+import { userService } from "../util/signed";
 
 export const itemRoute = new Elysia({prefix: '/item'})
-  .get('/', async ({ cookie : { user_id }}) => {
+  .use(userService)
+  .get("/", async () => {
+    const items = Item.getAll()
+    return (
+      <Layout>
+        <>
+          <Search/>
+          <ItemGrid items={items}/>
+        </>
+      </Layout>
+    )
+  })
+  .post('/search', async ({ body: {search}}) => {
+    const items = Item.search(search)
+    return <ItemGrid items={items}/>
+  }, {
+    body: t.Object({
+      search: t.String()
+    })
+  })
+  .get('/new', async ({}) => {
     return <Layout>
       <NewItem/>
     </Layout>
   })
-  .get('/:id', async ({params: { id }, cookie: { user_id }, redirect}) => {
-    if (!user_id.value) {
-      return redirect('/auth')
-    }
+  .get('/:id', async ({params: { id }, user_id }) => {
     const item = Item.getById(id)
-    const like = Like.getByUserIdAndItemId({item_id: id, user_id: user_id.value})
+    const like = Like.getByUserIdAndItemId({item_id: id, user_id})
     
     if (!item) return <NotFound/>
     
@@ -25,11 +43,8 @@ export const itemRoute = new Elysia({prefix: '/item'})
       <ItemView {...item } like_id={like?.id ?? null}/>
     </Layout>
   })
-  .post('/add', async ({ body: { name, price, image, description }, cookie: {user_id}, redirect }) => {
-    if (!user_id.value) {
-      return redirect('/auth')
-    }
-    const item = Item.create({ name, image, description, price: +price, user_id: user_id.value})
+  .post('/add', async ({ body: { name, price, image, description }, user_id }) => {
+    const item = Item.create({ name, image, description, price: +price, user_id})
     if (!item) {
       return <ServerMessage text="Error"/>
     }
