@@ -6,7 +6,7 @@ export const ChatView = ({chats}: {chats: {id: string, name: string}[]}) => {
   return <Layout fix_h>
     <div class='flex flex-row grow mt-4 h-3/4 md:w-2/3 md:mx-auto bg-slate-800 rounded-xl p-4'>
       <div class="flex flex-col h-full space-y-2 me-2 divide-y-2 divide-slate-600 font-medium">
-        {chats.map(i =>
+        {chats?.map(i =>
           <button
             hx-get={"/chat/" + i.id}
             hx-target='#chatPlaceholder'

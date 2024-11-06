@@ -17,6 +17,7 @@ export const chatRoute = new Elysia({prefix: '/chat'})
   .get('/', async ({ user_id }) => {
     const chats = Chat.getAllByUserId(user_id)
     return <ChatView chats={chats}/>
+    // return <div>hi</div>
   })
   .get('/:chat_id', async ({ user_id, params: { chat_id }}) => {
     const messages = Message.getAllByChatId(chat_id)

@@ -8,15 +8,13 @@ export const ItemView = ({
   description, 
   price, 
   stars,
-  like_id
 }: { 
   id: string, 
   name: string, 
   image: string, 
-  description?: string, 
-  price: number, 
+  price: number,
   stars?: number,
-  like_id: string | null
+  description?: string, 
 }) => {
   return <section class="py-8">
   <div class="mx-auto max-w-7xl px-8">
@@ -41,10 +39,9 @@ export const ItemView = ({
                           <Stars num={stars ?? 0}/>
                           <p class="font-normal text-xl text-slate-300">{description ?? ''}</p>
                       </div>
-                      { like_id
-                        ? <Dislike id={like_id} item_id={id}/>
-                        : <LikeButton item_id={id}/>
-                      }
+                      <div hx-get={'/like/status/' + id} hx-trigger='load once'>
+                        <LikeButton item_id="1"/>
+                      </div>
                   </div>
                   
                 <details class="open">

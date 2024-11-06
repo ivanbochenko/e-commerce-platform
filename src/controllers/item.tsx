@@ -33,15 +33,16 @@ export const itemRoute = new Elysia({prefix: '/item'})
       <NewItem/>
     </Layout>
   })
-  .get('/:id', async ({params: { id }, user_id }) => {
+  .get('/:id', async ({params: { id }}) => {
     const item = Item.getById(id)
-    const like = Like.getByUserIdAndItemId({item_id: id, user_id})
     
     if (!item) return <NotFound/>
     
     return <Layout>
-      <ItemView {...item } like_id={like?.id ?? null}/>
+      <ItemView {...item } />
     </Layout>
+  }, {
+    isSignIn: false
   })
   .post('/add', async ({ body: { name, price, image, description }, user_id }) => {
     const item = Item.create({ name, image, description, price: +price, user_id})

@@ -14,6 +14,10 @@ export const likeRoute = new Elysia({prefix: '/like'})
       <ItemGrid items={likes}/>
     </Layout>
   })
+  .get('/status/:item_id', async ({ params: { item_id }, user_id}) => {
+    const like = Like.getByUserIdAndItemId({item_id, user_id})
+    return like ? <Dislike id={like.id} item_id={item_id}/> : <LikeButton item_id={item_id}/>
+  })
   .post('/create/:item_id', async ({ params: { item_id }, user_id}) => {
     const like = Like.create({
       user_id,
