@@ -80,14 +80,23 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     })
   }
   )
-  .get('/stream/:chat_id', ({ params: { chat_id }, emitter }) =>
-    new Stream(stream => {
-      const sub = emitter.subscribe(chat_id, m => {
+  .get('/stream/:chat_id', ({ params: { chat_id }, emitter }) => {
+    const stream = new Stream()
+    const sub = emitter.subscribe(
+      chat_id,
+      m => {
         stream.send(<MessageBubble {...m}/>)
-      })
-      // setTimeout(() => {
-      //   sub.unsubscribe()
-      //   stream.close()
-      // }, 5*60*1000)
-    })
-  )
+      }
+    )
+    const timeout = 5*60*1000
+    setTimeout(() => {
+      sub.unsubscribe()
+      stream.close()
+    }, timeout)
+    return stream
+  })
+	// .get('/stream/:chat_id', function* ({ params: { chat_id }, emitter }) {
+  //   const sub = emitter.subscribe(chat_id, m => {
+  //     yield <MessageBubble {...m}/>
+  //   })
+	// })
