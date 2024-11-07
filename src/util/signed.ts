@@ -20,7 +20,7 @@ export const signService = new Elysia({ name: 'service' })
       if (!enabled) return
 
       onBeforeHandle( 
-        async ({ redirect, cookie: { token, user_id }, jwt, path }) => {
+        async ({ cookie: { token, user_id }, redirect, jwt, path }) => {
           if (!token.value) {
             return redirect('/auth')
           }
@@ -38,7 +38,7 @@ export const signService = new Elysia({ name: 'service' })
 export const userService = new Elysia()
   .use(signService)
   .guard({
-    as: 'scoped', 
+    as: 'local', 
     isSignIn: true,
     cookie: 'session'
   })

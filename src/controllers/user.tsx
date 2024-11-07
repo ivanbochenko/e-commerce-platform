@@ -13,6 +13,8 @@ export const userRoute = new Elysia({prefix: '/user'})
     if (!user) return <NotFound/>
 
     return <UserView {...user}/>
+  }, {
+    isSignIn: true
   })
   .get('/:email', async ({params: { email }}) => {
     const user = User.getByEmail(email)

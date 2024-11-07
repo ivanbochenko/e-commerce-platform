@@ -18,6 +18,8 @@ export const itemRoute = new Elysia({prefix: '/item'})
         </>
       </Layout>
     )
+  }, {
+
   })
   .post('/search', async ({ body: {search}}) => {
     const items = Item.search(search)
@@ -31,6 +33,8 @@ export const itemRoute = new Elysia({prefix: '/item'})
     return <Layout>
       <NewItem/>
     </Layout>
+  }, {
+    isSignIn: true
   })
   .get('/:id', async ({params: { id }}) => {
     const item = Item.getById(id)
