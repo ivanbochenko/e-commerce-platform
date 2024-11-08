@@ -36,7 +36,7 @@ export class Emitter<T> implements Publisher<T> {
   // Emit values to consumers
   emit(eventId: string, value: T) {
     const event = this.events.get(eventId)
-    if (!this.size || !event) return
+    if (!this.size || !event) return;
     event.forEach(callback => callback(value))
   }
   // Remove all subscribed consumers

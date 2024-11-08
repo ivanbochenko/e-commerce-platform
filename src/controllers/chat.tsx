@@ -7,7 +7,7 @@ import { Message } from "../models/message.model";
 import { Chat } from "../models/chat.model";
 import { userService } from "../util/signed";
 
-export const chatRoute = new Elysia({prefix: '/chat'})
+export const chatController = new Elysia({prefix: '/chat'})
   .decorate('emitter', new Emitter<MessageType>())
   .use(userService)
   .get('/inbox', async ({ user_id }) => {

@@ -5,7 +5,7 @@ import { jwtConfig } from "../util/jwt";
 import { sendEmail } from "../util/mail";
 import { User } from "../models/user.model";
 
-export const authRoute = new Elysia({prefix: '/auth'})
+export const authController = new Elysia({prefix: '/auth'})
   .model({
     signIn: t.Object({
       email: t.String(),

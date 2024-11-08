@@ -4,7 +4,7 @@ import { User } from '../models/user.model'
 import { NotFound } from "../views/components";
 import { userService } from "../util/signed";
 
-export const userRoute = new Elysia({prefix: '/user'})
+export const userController = new Elysia({prefix: '/user'})
   .use(userService)
   .get('/', async ({ user_id }) => {
 

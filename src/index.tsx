@@ -1,20 +1,20 @@
 import { Elysia } from "elysia";
 import { html } from '@elysiajs/html'
 import { staticPlugin } from '@elysiajs/static'
-import { userRoute } from "./controllers/user";
-import { authRoute } from "./controllers/auth";
-import { chatRoute } from "./controllers/chat";
-import { itemRoute } from "./controllers/item";
-import { likeRoute } from "./controllers/like";
+import { userController } from "./controllers/user";
+import { authController } from "./controllers/auth";
+import { chatController } from "./controllers/chat";
+import { itemController } from "./controllers/item";
+import { likeController } from "./controllers/like";
 
 const app = new Elysia()
   .use(html())
   .use(staticPlugin())
-  .use(authRoute)
-  .use(userRoute)
-  .use(itemRoute)
-  .use(likeRoute)
-  .use(chatRoute)
+  .use(authController)
+  .use(userController)
+  .use(itemController)
+  .use(likeController)
+  .use(chatController)
   .get("/", async ({redirect}) => redirect('/item'))
   .onRequest(({ request }) => {
     console.log(request.method + ': ' + request.url)

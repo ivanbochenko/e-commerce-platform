@@ -6,7 +6,7 @@ import { userService } from "../util/signed";
 
 // Like API
 
-export const likeRoute = new Elysia({prefix: '/like'})
+export const likeController = new Elysia({prefix: '/like'})
   .use(userService)
   .get('/', async ({ user_id }) => {
     const likes = Like.getAllItemsByUserId(user_id)

@@ -6,7 +6,7 @@ import { NewItem } from "../views/new_item";
 import { Item } from "../models/item.model";
 import { userService } from "../util/signed";
 
-export const itemRoute = new Elysia({prefix: '/item'})
+export const itemController = new Elysia({prefix: '/item'})
   .use(userService)
   .get("/", async () => {
     const items = Item.getAll()
