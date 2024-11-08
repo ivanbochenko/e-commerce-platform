@@ -38,13 +38,12 @@ export const signService = new Elysia({ name: 'service' })
 export const userService = new Elysia()
   .use(signService)
   .guard({
-    as: 'local', 
-    isSignIn: true,
-    cookie: 'session'
+    isSignIn: false,
+    cookie: 'optionalSession'
   })
   .resolve(
-    { as: 'scoped' }, 
-      ({ cookie: { user_id } }) => ({
-        user_id: user_id.value
-      })
+    ({ cookie: { user_id } }) => ({
+      user_id: user_id.value
+    })
   )
+  .as('plugin')

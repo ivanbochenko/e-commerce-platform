@@ -19,7 +19,7 @@ export const itemRoute = new Elysia({prefix: '/item'})
       </Layout>
     )
   }, {
-
+    isSignIn: false
   })
   .post('/search', async ({ body: {search}}) => {
     const items = Item.search(search)

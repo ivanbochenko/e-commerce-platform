@@ -88,16 +88,11 @@ export const chatRoute = new Elysia({prefix: '/chat'})
   )
   .get('/stream/:chat_id', ({ params: { chat_id }, emitter }) => {
     const stream = new Stream()
-    const subscription = emitter.subscribe(
-      chat_id,
-      m => {
-        stream.send(<MessageBubble {...m}/>)
-      }
-    )
+    const subscription = emitter.subscribe( chat_id, m => { stream.send(<MessageBubble {...m}/>) } )
     const timeout = 5*60*1000
     setTimeout(() => {
       subscription.unsubscribe()
-      // stream.close()
+      stream.close()
     }, timeout)
     return stream
   })
