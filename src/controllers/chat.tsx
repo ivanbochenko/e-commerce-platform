@@ -86,6 +86,10 @@ export const chatRoute = new Elysia({prefix: '/chat'})
     })
   }
   )
+
+  // As of october bun closes the connection once no events where sent in the last 10 seconds
+  // Hopefully this will be fixed in the future
+  
   .get('/stream/:chat_id', ({ params: { chat_id }, emitter }) => {
     const stream = new Stream()
     const subscription = emitter.subscribe( chat_id, m => { stream.send(<MessageBubble {...m}/>) } )
