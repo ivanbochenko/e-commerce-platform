@@ -1,3 +1,4 @@
+import { SQLiteError } from 'bun:sqlite';
 import { db } from '../db';
 
 export interface Item {
@@ -12,32 +13,55 @@ export interface Item {
 
 export class Item {
   static getAll() {
-    const res = db.query<Item, null>('SELECT * FROM item ORDER BY stars DESC').all(null);
-    return res
+    const query = db.query<Item, null>('SELECT * FROM item ORDER BY stars DESC')
+    try {
+      return query.all(null)
+    } catch (error) {
+      console.log((error as SQLiteError).message);
+      return []
+    }
   }
   static getById(id: string) {
-    const res = db.query<Item, string>('SELECT * FROM item WHERE id = ?').get(id)
-    return res
+    const query = db.query<Item, string>('SELECT * FROM item WHERE id = ?')
+    try {
+      return query.get(id)
+    } catch (error) {
+      console.log((error as SQLiteError).message);
+    }
   }
   static getAllByUserId(id: string) {
-    const res = db.query<Item, string>('SELECT * FROM item WHERE user_id = ?').all(id)
-    return res
+    const query = db.query<Item, string>('SELECT * FROM item WHERE user_id = ?')
+    try {
+      return query.all(id)
+    } catch (error) {
+      console.log((error as SQLiteError).message);
+      return []
+    }
   }
   static search(input: string) {
-    const res = db.query<Item, null>(
+    const query = db.query<Item, null>(
       `SELECT * FROM item WHERE name LIKE '%${input}%' OR description LIKE '%${input}%'`
-    ).all(null)
-    return res
+    )
+    try {
+      return query.all(null)
+    } catch (error) {
+      console.log((error as SQLiteError).message);
+      return []
+    }
   }
 
   static create(data: Omit<Item, 'id'>) {
-    const result = db.query<Item, Record<string, string | number>>(`
+    const query = db.query<Item, Record<string, string | number>>(`
       INSERT INTO user
       (id, name, email, password)
       VALUES ($id, $name, $email, $password)
       RETURNING *`
-    ).get({...data, id: crypto.randomUUID()})
+    )
 
-    return result;
+    try {
+      return query.get({...data, id: crypto.randomUUID()})
+    } catch (error) {
+      console.log((error as SQLiteError).message);
+    }
   }
 }
