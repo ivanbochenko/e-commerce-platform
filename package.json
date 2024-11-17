@@ -12,7 +12,7 @@
     "@elysiajs/jwt": "^1.1.1",
     "@elysiajs/static": "^1.1.1",
     "@elysiajs/stream": "^1.1.0",
-    "elysia": "^1.1.24",
+    "elysia": "^1.1.25",
     "nodemailer": "^6.9.16"
   },
   "devDependencies": {
